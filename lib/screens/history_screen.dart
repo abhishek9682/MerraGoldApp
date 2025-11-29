@@ -162,7 +162,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Widget _transactionList() {
+  Widget  _transactionList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(

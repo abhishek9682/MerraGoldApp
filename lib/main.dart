@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:goldproject/screens/app_lock_screen.dart';
 import 'package:goldproject/screens/terms_conditions_screen.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import 'compenent/snackbar.dart';
 import 'controllers/Delete_Bank.dart';
@@ -35,7 +36,7 @@ import 'l10n/app_localizations.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  // Set status bar color
+  await TokenStorage.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

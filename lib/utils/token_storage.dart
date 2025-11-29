@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenStorage {
   static const String _keyToken = "auth_token";
-  static Map<String, dynamic> _langData = {};
+  static Map<String, dynamic> _langData = <String,dynamic>{};
   static const String  _keyLang ="lang";
 
   /// Save Token
@@ -45,7 +44,7 @@ class TokenStorage {
 
 // Get language data (JSON string)
   static String translate(String key) {
-    return _langData[key]?.toString() ?? key;
+    return (_langData[key]?.toString() ?? key).toString();
   }
 
 // Remove language data

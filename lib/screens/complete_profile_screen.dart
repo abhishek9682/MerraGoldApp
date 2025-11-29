@@ -99,7 +99,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(provider.apiStatus ?? "Failed to update profile"),
+          content: Text(provider.apiStatus ?? "Failed ${provider.message}"),
           backgroundColor: Colors.red,
         ),
       );

@@ -23,18 +23,24 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+
+    // Schedule fetch after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getData();
+    });
   }
 
-  getData()
-  async {
-    final provider=Provider.of<ProfileDetailsProvider>(context,listen: false);
+  void getData() async {
+    final provider = Provider.of<ProfileDetailsProvider>(context, listen: false);
+
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
+
     await provider.fetchProfile();
+
     setState(() {
-      isLoading=false;
+      isLoading = false;
     });
   }
 

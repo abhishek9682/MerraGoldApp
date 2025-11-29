@@ -28,7 +28,6 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
   final TextEditingController _branchController = TextEditingController();
 
   bool isLoading = false;
-
   /// FIXED: make nullable!
   String? _selectedAccountType;
   int _selectedNavIndex = 3;

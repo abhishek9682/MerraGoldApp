@@ -89,8 +89,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
       });
       Map<String, dynamic> body = {
         "amount": widget.cashAmount.toString(),
-        "gateway_id": profileProvider.profileData?.data?.profile
-            ?.primaryBankAccount?.id.toString(),
+        "gateway_id": profileProvider.profileData?.data?.profile?.primaryBankAccount?.id.toString(),
         "supported_currency": "INR"
       };
 
@@ -116,6 +115,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
       }
       else
         {
+          SnackBar(content: Text("payment Failed! ${provider.mess}"),backgroundColor: Colors.green,);
 
         }
     }
@@ -128,8 +128,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
     getData();
   }
 
-  getData()
-  async {
+  getData() async {
     setState(() {
       isLoading=true;
     });

@@ -44,7 +44,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
     });
   }
 
-  Future<void> _setPrimary(ProfileDetailsProvider provider, int bankId) async {
+  Future<void>  _setPrimary(ProfileDetailsProvider provider, int bankId) async {
     setState(() => _loadingAction = true);
 
     try {
@@ -319,7 +319,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                   elevation: 8,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
-                child: Text(TokenStorage.translate("Create Account"), style: AppTextStyles.buttonText),
+                child: Text("Add Bank Account", style: AppTextStyles.buttonText),
               ),
             ),
             SizedBox( height:10),

@@ -461,7 +461,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         }
       } else {
         _showErrorSnackbar(
-            "Update failed! Try again ${profile.updateResponse?.message}");
+            "Update failed! Try again? ${profile.message}");
       }
     } catch (e) {
       _showErrorSnackbar("An error occurred while updating profile");
@@ -508,6 +508,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           kycId.clear();
           _currentStep = 0; // go back to step 1 after success
         });
+
       } else {
         final errorMessage = response?['data'] is List
             ? (response['data'] as List).join("\n")

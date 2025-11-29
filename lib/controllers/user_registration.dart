@@ -5,7 +5,8 @@ import '../models/user_registration.dart';
 
 class CompleteProfileProvider with ChangeNotifier {
   ApiClient apiClient=ApiClient();
-
+  String _message="";
+  String get message=>_message;
   bool isLoading = false;
   String? apiStatus;
   UserRegistration? profileResponse;
@@ -26,6 +27,7 @@ class CompleteProfileProvider with ChangeNotifier {
         return true;
       } else {
         apiStatus = response?["data"][0] ?? "Profile update failed";
+        _message=response['data'];
         return false;
       }
 

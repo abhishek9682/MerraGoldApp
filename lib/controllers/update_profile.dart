@@ -12,6 +12,7 @@ class UpdateProfiles with ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
+  String message ="null";
   Future<void> updateProfile(Map<String, String> fields, Map<String, File> files) async {
     _loading = true;
     notifyListeners();
@@ -27,7 +28,8 @@ class UpdateProfiles with ChangeNotifier {
 
         debugPrint("✅ Profile Updated Successfully: ${updateResponse?.status}");
       } else {
-        updateResponse = null;
+        message=response[0]['data'];
+        updateResponse = response;
         debugPrint("⚠️ updateProfile(): Response was NULL");
       }
     // } catch (e) {

@@ -6,6 +6,7 @@ import '../models/gold_purchage.dart';
 
 class BuyGold with ChangeNotifier {
   GoldPurchaseResponse? _paymentInitiationRequest;
+  String? mess="";
 
   GoldPurchaseResponse? get paymentInitiationRequest =>
       _paymentInitiationRequest;
@@ -26,7 +27,6 @@ class BuyGold with ChangeNotifier {
       print("Buy Gold response keys: ${response.keys}");
       print("Buy Gold response status value: ${response["status"]}");
 
-
       if (response != null && response["status"]== "success") {
         _paymentInitiationRequest = GoldPurchaseResponse.fromJson(response);
         _loading = false;
@@ -34,6 +34,7 @@ class BuyGold with ChangeNotifier {
         return true;   // SUCCESS ✔
       } else {
         _loading = false;
+        mess=response[0]["data"];
         notifyListeners();
         return false;  // FAILURE ❌
       }
