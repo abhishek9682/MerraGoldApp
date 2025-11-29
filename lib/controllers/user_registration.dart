@@ -5,6 +5,7 @@ import '../models/user_registration.dart';
 
 class CompleteProfileProvider with ChangeNotifier {
   ApiClient apiClient=ApiClient();
+
   bool isLoading = false;
   String? apiStatus;
   UserRegistration? profileResponse;
