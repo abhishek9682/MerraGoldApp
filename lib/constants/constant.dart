@@ -1,0 +1,1 @@
+const base_url="https://demo.kpgpgold.com/api";
