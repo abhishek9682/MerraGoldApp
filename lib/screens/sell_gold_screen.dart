@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/profile_details.dart';
+import '../utils/token_storage.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
 import 'history_screen.dart';
@@ -50,11 +51,11 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
         Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalDetailsScreen()));
       }
 
-    _selectedBankId=profile?.primaryBankAccount?.id??0;
+    _selectedBankId=profile.primaryBankAccount?.id??0;
 
     // 1) Get gold rate per gram (₹/g)
     goldRate =
-        double.tryParse(profile?.currentGoldPricePerGram ?? '0') ?? 0;
+        double.tryParse(profile.currentGoldPricePerGram ?? '0') ?? 0;
 
     // 2) Get your total gold (if API gives it)
     //    Change `totalGoldInGram` to your actual field name
@@ -209,7 +210,15 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
       _amountController.text = _quickAmounts[index]['amount'].toString();
       _goldController.text = _quickAmounts[index]['gold'].toString();
     });
+
+    // Immediately calculate corresponding value
+    if (_isByAmount) {
+      _calculateGold();
+    } else {
+      _calculateAmount();
+    }
   }
+
 
   void _continueToPayment() async {
     final profileProvider = Provider.of<ProfileDetailsProvider>(context, listen: false);
@@ -376,11 +385,14 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
             const SizedBox(height: 24),
 
             // Quick Select
-            Text('Quick Select', style: AppTextStyles.body16W600White),
+            Text(TokenStorage.translate("Quick Select Amount"), style: AppTextStyles.body16W600White),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
+            GridView.count(
+              crossAxisCount: 3, // 3 items per row
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              shrinkWrap: true,       // important to fit inside Column/ScrollView
+              physics: const NeverScrollableScrollPhysics(), // disable inner scrolling
               children: [
                 ...List.generate(_quickAmounts.length, (index) {
                   return _buildQuickAmountChip(
@@ -392,8 +404,8 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   );
                 }),
                 _buildQuickAmountChip(
-                  amount: 'Custom',
-                  gold: 'Enter value',
+                  amount: TokenStorage.translate("custom"),
+                    gold: 'Enter value',
                   isSelected: false,
                   onTap: () {
                     setState(() {
@@ -405,6 +417,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                 ),
               ],
             ),
+
             const SizedBox(height: 24),
 
             // Warning Box
@@ -526,10 +539,10 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Welcome Back Title
                 Text(
-                  'Welcome Back',
+                    TokenStorage.translate("Welcome Back"),
                   style: AppTextStyles.heading
                 ),
 
@@ -311,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ? _sendOTP
                 : null,
             child: Text(
-              'Send OTP',
+              TokenStorage.translate("Send OTP"),
               style: AppTextStyles.buttonText
             ),
           ),

@@ -5,6 +5,8 @@ import '../compenent/custom_style.dart';
 import '../controllers/language_data_provider.dart';
 import '../controllers/language_provider.dart';
 import '../models/Language.dart';
+import '../utils/token_storage.dart';
+import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
@@ -17,11 +19,26 @@ class LanguageSelectionScreen extends StatefulWidget {
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   LanguageData? selectedLanguage;
   // TokenStorage storeLang=TokenStorage();
+  String languageIs="";
   @override
   void initState() {
     super.initState();
-    Provider.of<LanguageProvider>(context, listen: false).fetchLanguages();
-    Provider.of<LanguageDataProvider>(context,listen: false);
+    checkLanguage();
+  }
+
+  checkLanguage()
+  async{
+    final provider=Provider.of<LanguageProvider>(context, listen: false);
+    await provider.fetchLanguages();
+    String? lang=await TokenStorage.getLan();
+    if(lang!=null)
+      {
+        int index=provider.languages.indexWhere((e)=>e.id.toString()==lang);
+        setState(() {
+          selectedLanguage=provider.languages[index];
+        });
+      }
+
   }
 
   @override
@@ -38,12 +55,15 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
               child: Column(
                 children: [
-                  Text('Choose Your Language', style: AppTextStyles.heading),
+                  Text(
+                    'Choose Your Language',
+                    style: AppTextStyles.heading.copyWith(fontSize: 27)
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Select your preferred language\nfor the best experience',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.subHeading,
+                    style: AppTextStyles.subHeading
                   ),
                 ],
               ),
@@ -74,7 +94,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
                         final langResponse=  Provider.of<LanguageDataProvider>(context,listen: false);
                         langResponse.getLanguageData(language.id.toString());
-
+                        languageIs=language.name!;
+                        print("------------$langResponse");
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -165,21 +186,34 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    if (selectedLanguage == null) {
+                      GlobalSnackBar.showError("Please select language");
+                      return;
+                    }
 
-                    if(selectedLanguage!=null) {
-                      Navigator.push(
+                    // Save selected language (optional)
+                    // await TokenStorage.saveLanguage(selectedLanguage!.shortName ?? "");
+
+                    String? token = await TokenStorage.getToken();    // <-- token check
+                    print("TOKEN IS: $token");
+
+                    if (token == null || token.isEmpty) {
+                      // User not logged in
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
+                    } else {
+                      // User already logged in → go to dashboard
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                            (route) => false,
                       );
                     }
-                    else
-                      {
-                        GlobalSnackBar.showError("Please select language");
-                      }
                   },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD700),
                     foregroundColor: const Color(0xFF0A0A0A),

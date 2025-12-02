@@ -77,7 +77,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("User already registered please login"),
+            content: Text(TokenStorage.translate("User already registered, please login")),
             backgroundColor: Colors.red,
           ),
         );
@@ -86,7 +86,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.otpResponse?.data?.message ??
-              "Failed to send OTP"),
+              TokenStorage.translate("Failed to send OTP")),
           backgroundColor: Colors.red,
         ),
       );
@@ -135,7 +135,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
                 // Create Account Title
                 Text(
-                 TokenStorage.translate("Create An Account"),
+                  TokenStorage.translate("Create An Account"),
                   style: AppTextStyles.pageTitle.copyWith(fontSize: 32),
                 ),
 
@@ -143,7 +143,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
                 // Subtitle
                 Text(
-                  'Join Meera Gold today',
+                  TokenStorage.translate("Join Meera Gold today"),
                   style: AppTextStyles.bodyText.copyWith(
                     fontSize: 16,
                     color: Colors.white60,
@@ -156,7 +156,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    TokenStorage.translate("Phone Number"),
+                    TokenStorage.translate("Enter mobile number"),
                     style: AppTextStyles.labelText.copyWith(letterSpacing: 1),
                   ),
                 ),
@@ -179,7 +179,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     maxLength: 10,
                     style: AppTextStyles.inputText,
                     decoration: InputDecoration(
-                      hintText: 'Enter mobile number',
+                      hintText: TokenStorage.translate("Enter mobile number"),
                       hintStyle: AppTextStyles.inputText.copyWith(
                         color: Colors.white30),
                       prefixIcon: Container(
@@ -246,7 +246,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                     ),
                     child: Text(
-                      'Send OTP',
+                      TokenStorage.translate("Send OTP"),
                       style:
                       AppTextStyles.buttonText.copyWith(fontSize: 18),
                     ),
@@ -260,7 +260,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have account? ',
+                      TokenStorage.translate("Already have an account?"),
                       style: AppTextStyles.bodyText.copyWith(
                         color: Colors.white60,
                       ),
@@ -268,7 +268,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     InkWell(
                       onTap: _navigateToLogin,
                       child: Text(
-                        TokenStorage.translate( "Login"),
+                        TokenStorage.translate("Login"),
                         style: AppTextStyles.bodyText.copyWith(
                           color: const Color(0xFFFFD700),
                           fontWeight: FontWeight.w600,

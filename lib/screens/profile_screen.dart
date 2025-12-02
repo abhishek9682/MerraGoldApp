@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../controllers/language_data_provider.dart';
+import '../controllers/language_provider.dart';
 import '../controllers/profile_details.dart';
 import '../controllers/update_profile.dart';
+import '../models/Language.dart';
 import '../utils/token_storage.dart';
+import 'language_selection_screen.dart';
 import 'login_screen.dart';
 import 'notifications_screen.dart';
 import 'wallet_screen.dart';
@@ -28,12 +32,32 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedNavIndex = 3; // Profile is selected
+  LanguageData? selectedLanguage;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Provider.of<ProfileDetailsProvider>(context,listen: false).fetchProfile();
+    checkLanguage();
   }
+
+  checkLanguage()
+  async{
+    final provider=Provider.of<LanguageProvider>(context, listen: false);
+    await provider.fetchLanguages();
+    String? lang=await TokenStorage.getLan();
+    if(lang!=null)
+    {
+      int index=provider.languages.indexWhere((e)=>e.id.toString()==lang);
+      setState(() {
+        selectedLanguage=provider.languages[index];
+
+      });
+    }
+
+  }
+
+
   void _onNavItemTapped(int index) {
     if (index == 0) {
       Navigator.pop(context);
@@ -55,69 +79,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showLanguageSelector() {
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFF1A1A1A),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Consumer<ProfileDetailsProvider>(builder: (context, provider, _) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.white30,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Text("Select Language", style: AppTextStyles.heading),
-                const SizedBox(height: 24),
-
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: provider.profileData?.data?.languages?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final lang = provider.profileData!.data!.languages![index];
-
-                    bool isSelected =
-                        provider.selectedLanguage == lang.name;
-
-                    return _buildLanguageOption(
-                      lang.name ??'',
-                      lang.flag ??'',
-                      isSelected,
-                      onTap: () {
-                        provider.setSelectedLanguage(lang.name ??'');
-                        Navigator.pop(context);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                            Text("Language changed to ${lang.name}"),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            );
-          }),
-        );
-      },
+    final provider=Provider.of<ProfileDetailsProvider>(context,listen: false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LanguageSelectionScreen()),
     );
+    // showModalBottomSheet(
+    //   context: context,
+    //   backgroundColor: const Color(0xFF1A1A1A),
+    //   shape: const RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    //   ),
+    //   builder: (context) {
+    //     return Padding(
+    //       padding: const EdgeInsets.all(24.0),
+    //       child: Consumer<ProfileDetailsProvider>(builder: (context, provider, _) {
+    //         return Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Center(
+    //               child: Container(
+    //                 width: 40,
+    //                 height: 4,
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.white30,
+    //                   borderRadius: BorderRadius.circular(2),
+    //                 ),
+    //               ),
+    //             ),
+    //             const SizedBox(height: 24),
+    //             Text("Select Language", style: AppTextStyles.heading),
+    //             const SizedBox(height: 24),
+    //
+    //             ListView.builder(
+    //               shrinkWrap: true,
+    //               physics: const NeverScrollableScrollPhysics(),
+    //               itemCount: provider.profileData?.data?.languages?.length ?? 0,
+    //               itemBuilder: (context, index) {
+    //                 final lang = provider.profileData!.data!.languages![index];
+    //
+    //                 bool isSelected =
+    //                     provider.selectedLanguage == lang.name;
+    //
+    //
+    //                 return _buildLanguageOption(
+    //                   lang.name ??'',
+    //                   lang.flag ??'',
+    //                   isSelected,
+    //                   onTap: () {
+    //                     provider.setSelectedLanguage(lang.name ??'');
+    //
+    //                     Navigator.pop(context);
+    //
+    //                     ScaffoldMessenger.of(context).showSnackBar(
+    //                       SnackBar(
+    //                         content:
+    //                         Text("Language changed to ${lang.name}"),
+    //                         backgroundColor: Colors.green,
+    //                       ),
+    //                     );
+    //                   },
+    //                 );
+    //               },
+    //             ),
+    //           ],
+    //         );
+    //       }),
+    //     );
+    //   },
+    // );
   }
 
   Widget _buildLanguageOption(
@@ -171,36 +201,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 
-  void _showLogoutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A1A),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('Logout', style: AppTextStyles.heading),
-        content: Text('Are you sure you want to logout?', style: AppTextStyles.bodyText),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppTextStyles.subHeading.copyWith(color: Colors.white60)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out successfully')),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
-              foregroundColor: const Color(0xFF0A0A0A),
-            ),
-            child: Text('Logout', style: AppTextStyles.buttonText),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showLogoutDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       backgroundColor: const Color(0xFF1A1A1A),
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  //       title: Text('Logout', style: AppTextStyles.heading),
+  //       content: Text('Are you sure you want to logout?', style: AppTextStyles.bodyText),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context),
+  //           child: Text(TokenStorage.translate("Cancel"), style: AppTextStyles.subHeading.copyWith(color: Colors.white60)),
+  //         ),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             Navigator.pop(context);
+  //             ScaffoldMessenger.of(context).showSnackBar(
+  //               const SnackBar(content: Text('Logged out successfully')),
+  //             );
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: const Color(0xFFFFD700),
+  //             foregroundColor: const Color(0xFF0A0A0A),
+  //           ),
+  //           child: Text('Logout', style: AppTextStyles.buttonText),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         updateProvider.updateResponse!.status == "success") {
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Profile image updated successfully!")),
+         SnackBar(content: Text(TokenStorage.translate("Profile image updated successfully!"))),
       );
 
       // 🔥 Refresh profile to show new image in header
@@ -266,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Upload failed! Try again.")),
+         SnackBar(content: Text(TokenStorage.translate("Upload failed! Try again"))),
       );
     }
   }
@@ -310,8 +340,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () {
               if (isKycLocked) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("You cannot change profile image after completing KYC."),
+                   SnackBar(
+                    content: Text(TokenStorage.translate("You cannot change profile image after completing KYC.")),
                   ),
                 );
               } else {
@@ -378,7 +408,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Account', style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(TokenStorage.translate("Create Account"), style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
@@ -399,7 +429,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.account_balance,
-                  title: 'Bank Accounts',
+                  title: TokenStorage.translate("Add Bank Account"),
                   subtitle: '$bankCount accounts linked',
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const BankAccountsScreen()));
@@ -408,7 +438,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.people_outline,
-                  title: 'Nominee Details',
+                  title: TokenStorage.translate("Add Nominee"),
                   subtitle: 'Manage nominees',
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const NomineeListScreen()));
@@ -417,8 +447,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.card_giftcard,
-                  title: 'Refer & Earn',
-                  subtitle: 'Invite friends & get ₹100',
+                  title: TokenStorage.translate("Refer & Earn"),
+                  subtitle: "${TokenStorage.translate("Share & Invite Friends")} (₹100)",
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const ReferEarnScreen()));
                   },
@@ -432,12 +462,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildPreferencesSection() {
+    final provider=Provider.of<ProfileDetailsProvider>(context,listen: false);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Preferences', style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(TokenStorage.translate("Preferences"), style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
@@ -449,8 +480,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 _buildListItem(
                   icon: Icons.notifications_outlined,
-                  title: 'Notifications',
-                  subtitle: 'Manage alerts',
+                  title: TokenStorage.translate("notification"),
+                  subtitle: TokenStorage.translate("Managealerts"),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsScreen()));
                   },
@@ -458,8 +489,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.lock_outline,
-                  title: 'Security',
-                  subtitle: 'Biometric login',
+                  title: TokenStorage.translate("Security"),
+                  subtitle: TokenStorage.translate('Biometric login'),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const SecurityScreen()));
                   },
@@ -468,7 +499,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildListItem(
                   icon: Icons.language,
                   title:TokenStorage.translate("Language"),
-                  subtitle: 'English',
+                  subtitle: '${selectedLanguage?.name}',
                   onTap: _showLanguageSelector,
                 ),
               ],
@@ -485,7 +516,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Support', style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(TokenStorage.translate("Getsupport"), style: AppTextStyles.subHeading.copyWith(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
@@ -497,8 +528,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 _buildListItem(
                   icon: Icons.help_outline,
-                  title: 'Help Center',
-                  subtitle: 'Get support',
+                  title: TokenStorage.translate("HelpCenter"),
+                  subtitle: TokenStorage.translate("Terms & Conditions"),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpCenterScreen()));
                   },
@@ -506,8 +537,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.description_outlined,
-                  title: 'Terms & Conditions',
-                  subtitle: 'Read our terms',
+                  title: TokenStorage.translate("Terms & Conditions"),
+                  subtitle: TokenStorage.translate("Readourterms"),
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsConditionsScreen()));
                   },
@@ -588,7 +619,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const Icon(Icons.logout, color: Colors.red, size: 20),
               const SizedBox(width: 8),
               Text(
-                'Logout',
+                TokenStorage.translate("Logout"),
                 style: AppTextStyles.buttonText
                     .copyWith(color: Colors.red, fontSize: 16),
               ),
@@ -612,10 +643,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

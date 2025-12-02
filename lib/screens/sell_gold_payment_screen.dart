@@ -7,6 +7,7 @@ import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/profile_details.dart';
 import '../controllers/sell_gold.dart';
+import '../utils/token_storage.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
 import 'history_screen.dart';
@@ -473,10 +474,10 @@ class _SellGoldPaymentScreenState extends State<SellGoldPaymentScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

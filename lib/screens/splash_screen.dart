@@ -23,8 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 5), () async{
       if (mounted) {
         String? token = await TokenStorage.getToken(); // <-- FIX 1: make it nullable
+        // String? getToken = await TokenStorage.getToken();
 
         print("token is $token");
+        // print("language data is $getToken");
 
         if (token == null || token.isEmpty) {
           // <-- FIX 2: proper null check

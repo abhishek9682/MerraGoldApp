@@ -6,6 +6,7 @@ import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/sell_gold.dart';
 import '../models/sell_gold.dart';
+import '../utils/token_storage.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
 import 'history_screen.dart';
@@ -124,7 +125,7 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
                   ),
                   child: Column(
                     children: [
-                      Text('Transaction ID', style: AppTextStyles.body12White60),
+                      Text(TokenStorage.translate("Transaction ID"), style: AppTextStyles.body12White60),
                       const SizedBox(height: 4),
                       Text('${widget.txnId}', style: AppTextStyles.body16W600Gold),
                     ],
@@ -154,25 +155,25 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
                     // _buildDetailRow("Price per Gram", "₹${goldData. ?? "0"}"),
                     // const SizedBox(height: 12),
 
-                    _buildDetailRow("Gross Amount", "₹${goldData.grossAmount ?? "0"}"),
+                    _buildDetailRow(TokenStorage.translate("Gross Amount"), "₹${goldData.grossAmount ?? "0"}"),
 
                     const SizedBox(height: 25),
                     _buildSectionTitle("Taxes & Charges"),
                     const SizedBox(height: 12),
 
-                    _buildDetailRow("GST (${goldData?.gstPercentage ?? "0"}%)", "₹${goldData.gstAmount ?? "0"}"),
+                    _buildDetailRow("${TokenStorage.translate("GST (%)")} (${goldData?.gstPercentage ?? "0"}%)", "₹${goldData.gstAmount ?? "0"}"),
                     const SizedBox(height: 12),
 
-                    _buildDetailRow("TDS (${goldData?.tdsPercentage ?? "0"}%)", "₹${goldData.tdsAmount ?? "0"}"),
+                    _buildDetailRow("${TokenStorage.translate( "TDS (%)")} (${goldData?.tdsPercentage ?? "0"}%)", "₹${goldData.tdsAmount ?? "0"}"),
                     const SizedBox(height: 12),
 
-                    _buildDetailRow("TCS (${goldData?.tcsPercentage ?? "0"}%)", "₹${goldData.tcsAmount ?? "0"}"),
+                    _buildDetailRow("${TokenStorage.translate("TCS (%)")} (${goldData?.tcsPercentage ?? "0"}%)", "₹${goldData.tcsAmount ?? "0"}"),
                     const SizedBox(height: 12),
 
-                    _buildDetailRow("Total Deductions", "₹${goldData.totalDeductions ?? "0"}"),
+                    _buildDetailRow(TokenStorage.translate("Total Deductions"), "₹${goldData.totalDeductions ?? "0"}"),
 
                     const SizedBox(height: 25),
-                    _buildSectionTitle("Final Amount"),
+                    _buildSectionTitle(TokenStorage.translate("Total Amount")),
                     const SizedBox(height: 12),
 
                     _buildDetailRow("Net Amount Credited", "₹${goldData.netAmount ?? "0"}",),
@@ -182,7 +183,7 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
 
                     const SizedBox(height: 12),
                     _buildDetailRow(
-                      "Date & Time",
+                      TokenStorage.translate("Date & Time"),
                       DateFormat('MMM dd, yyyy').format(DateTime.now()),
                     ),
                   ],
@@ -212,7 +213,7 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: Text('View Transaction History', style: AppTextStyles.body16W600Black),
+                    child: Text(TokenStorage.translate("Transaction History"), style: AppTextStyles.body16W600Black),
                   ),
                 ),
 
@@ -237,7 +238,7 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
                       ),
                     ),
                     child: Text(
-                      'Back to Dashboard',
+                      TokenStorage.translate("Back to Dashboard"),
                       style: AppTextStyles.body16W600Gold,
                     ),
                   ),
@@ -275,10 +276,10 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

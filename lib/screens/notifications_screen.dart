@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../controllers/notifiacation_provier.dart';
@@ -60,7 +61,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Notifications',
+            TokenStorage.translate("notification"),
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.w600,

@@ -34,7 +34,7 @@ class BuyGold with ChangeNotifier {
         return true;   // SUCCESS ✔
       } else {
         _loading = false;
-        mess=response[0]["data"];
+        mess=response["data"][0];
         notifyListeners();
         return false;  // FAILURE ❌
       }

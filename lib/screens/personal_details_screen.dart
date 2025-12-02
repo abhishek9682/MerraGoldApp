@@ -65,6 +65,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     super.initState();
     _loadProfileData();
     Provider.of<ProfileDetailsProvider>(context, listen: false);
+    print("------${TokenStorage.translate("user image")}");
   }
 
   Future<void> _loadProfileData() async {
@@ -427,7 +428,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         "email": _emailController.text.trim(),
         "phone": _phoneController.text.trim(),
         "phone_code": "91",
-        "username": "${_firstNameController.text}123",
+        "username": "${_firstNameController.text}432",
         "country_code": "IN",
         "country": "India",
         "father_mother_wife_name": "Abhishek",
@@ -583,11 +584,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         buildStep(
-          title: 'Personal Details',
+          title: TokenStorage.translate("Personal Information"),
           isActive: _currentStep == 0,
           isCompleted: true,
         ),
-        const SizedBox(width: 40,),
+        const SizedBox(width: 20,),
         buildStep(
           title: TokenStorage.translate("KYC Information"),
           isActive: _currentStep == 1,
@@ -609,7 +610,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          '${TokenStorage.translate("Profile Details")}',
+          TokenStorage.translate("Profile Details"),
           style: AppTextStyles.heading,
         ),
         centerTitle: true,
@@ -659,6 +660,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       bottomNavigationBar: _buildBottomNav(),
     );
   }
+
 
   Widget _buildProfilePictureSection() {
     return Center(
@@ -735,7 +737,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Basic Information', style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("Personal Information"), style: AppTextStyles.subHeading1),
         const SizedBox(height: 16),
         _buildTextField(
           label: TokenStorage.translate("Firstname").toUpperCase(),
@@ -857,7 +859,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: _buildTextField(
-                label: 'AADHAAR CARD NUMBER',
+                label: TokenStorage.translate("AADHAAR NUMBER"),
                 controller: _aadharController,
                 icon: Icons.badge,
                 hint: '1234 5678 9012',
@@ -1112,7 +1114,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               Border.all(color: Colors.amberAccent, width: 1.2),
             ),
             child: Text(
-              status ?? 'Pending',
+              status ?? TokenStorage.translate("Pending"),
               style: AppTextStyles.subHeading.copyWith(
                 color: Colors.amberAccent,
                 fontWeight: FontWeight.w600,
@@ -1186,7 +1188,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('DATE OF BIRTH', style: AppTextStyles.subHeading),
+        Text(TokenStorage.translate("DD-MM-YYYY"), style: AppTextStyles.subHeading),
         const SizedBox(height: 8),
         InkWell(
           onTap: iskycCompleted ? null : _selectDate,
@@ -1219,7 +1221,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('GENDER', style: AppTextStyles.subHeading),
+        Text(TokenStorage.translate('GENDER'), style: AppTextStyles.subHeading),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1232,7 +1234,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             child: DropdownButton<String>(
               value: _selectedGender.isEmpty ? null : _selectedGender,
               hint:  Text(
-                "Select Gender",
+                TokenStorage.translate("Select Gender"),
                 style: AppTextStyles.subHeading,
               ),
               isExpanded: true,
@@ -1292,7 +1294,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              child: const Text('Back'),
+              child: Text(TokenStorage.translate("Back")),
             ),
           ),
         ),
@@ -1374,9 +1376,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person,TokenStorage.translate("Profit")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

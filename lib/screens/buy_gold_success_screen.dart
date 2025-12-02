@@ -93,7 +93,9 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                 const SizedBox(height: 12),
 
                 Text(
-                  'Your digital gold has been successfully added to your wallet.',
+                    TokenStorage.translate(
+                        'Your digital gold has been successfully added to your wallet.'
+                    ),
                   style: AppTextStyles.bodyText.copyWith(
                       fontSize: 14, color: Colors.white70, height: 1.5),
                   textAlign: TextAlign.center,
@@ -112,7 +114,7 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'Transaction ID',
+                        TokenStorage.translate('Transaction ID'),
                         style: AppTextStyles.labelText.copyWith(
                             fontSize: 12, color: Colors.white60),
                       ),
@@ -140,36 +142,36 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                   ),
                   child: Column(
                     children: [
-                      _buildDetailRow('Gold Purchased',
+                      _buildDetailRow(TokenStorage.translate('Gold Purchased'),
                           '${data.goldGramsPurchased.toStringAsFixed(3)} grams'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('Amount Paid',
+                      _buildDetailRow( TokenStorage.translate('Amount Paid'),
                           '₹${data.amountPaid.toStringAsFixed(2)}'),
                       const SizedBox(height: 12),
 
                       _buildDetailRow(TokenStorage.translate("Payment Method"), widget.paymentMethod),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('New Total Holdings',
+                      _buildDetailRow(TokenStorage.translate('New Total Holdings'),
                           '${data.goldBalance.toStringAsFixed(3)} grams'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('Portfolio Value',
+                      _buildDetailRow(TokenStorage.translate('Portfolio Value'),
                           '₹${data.goldValue.toStringAsFixed(2)}'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('GST', '₹${data.gstAmount.toStringAsFixed(2)}'),
+                      _buildDetailRow(TokenStorage.translate('GST'), '₹${data.gstAmount.toStringAsFixed(2)}'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('TDS', '₹${data.tdsAmount.toStringAsFixed(2)}'),
+                      _buildDetailRow( TokenStorage.translate('TDS'), '₹${data.tdsAmount.toStringAsFixed(2)}'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('Total Tax',
+                      _buildDetailRow( TokenStorage.translate('Total Tax'),
                           '₹${data.totalTaxAmount.toStringAsFixed(2)}'),
                       const SizedBox(height: 12),
 
-                      _buildDetailRow('Date & Time', '$now'),
+                      _buildDetailRow(TokenStorage.translate('Date & Time'), '$now'),
                     ],
                   ),
                 ),
@@ -196,7 +198,7 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14)),
                     ),
-                    child: Text('View My Wallet', style: AppTextStyles.buttonText),
+                    child: Text(TokenStorage.translate('View My Wallet'), style: AppTextStyles.buttonText),
                   ),
                 ),
 
@@ -221,7 +223,7 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                           borderRadius: BorderRadius.circular(14)),
                     ),
                     child: Text(
-                      'Buy More Gold',
+                      TokenStorage.translate('Buy More Gold'),
                       style: AppTextStyles.buttonText
                           .copyWith(color: const Color(0xFFFFD700)),
                     ),
@@ -240,7 +242,7 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
                           (route) => false,
                     );
                   },
-                  child: Text('Back to Dashboard',
+                  child: Text(TokenStorage.translate('Back to Dashboard'),
                       style: AppTextStyles.buttonText
                           .copyWith(color: Colors.white60)),
                 )
@@ -277,8 +279,8 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

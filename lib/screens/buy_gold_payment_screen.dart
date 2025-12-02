@@ -66,13 +66,13 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
   String _getPaymentMethodName() {
     switch (_selectedPaymentMethod) {
       case 0:
-        return 'UPI';
+        return TokenStorage.translate("UPI Payment");
       case 1:
-        return 'Net Banking';return 'Debit/Credit Card';
+        return TokenStorage.translate("Net Banking");return 'Debit/Credit Card';
       case 3:
-        return 'Meera Wallet';
+        return TokenStorage.translate("Meera Wallet");
       default:
-        return 'UPI';
+        return TokenStorage.translate("UPI Payment");
     }
   }
 
@@ -115,7 +115,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
       }
       else
         {
-          SnackBar(content: Text("payment Failed! ${provider.mess}"),backgroundColor: Colors.green,);
+          SnackBar(content: Text("${TokenStorage.translate("Payment Breakdown")} ${provider.mess}"),backgroundColor: Colors.green,);
 
         }
     }
@@ -159,7 +159,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Payment Details', style: AppTextStyles.pageTitle),
+        title: Text(TokenStorage.translate('Payment Details'), style: AppTextStyles.pageTitle),
         centerTitle: true,
       ),
       body: isLoading?Center(child: CustomLoader(),):SingleChildScrollView(
@@ -177,11 +177,11 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
               ),
               child: Column(
                 children: [
-                  _buildSummaryRow('Gold Purchase', '${widget.goldAmount.toStringAsFixed(3)}g'),
+                  _buildSummaryRow(TokenStorage.translate("Gold Purchase"), '${widget.goldAmount.toString()}g'),
                   const SizedBox(height: 12),
-                  _buildSummaryRow('Gold Rate', '₹${profileProvider.profileData?.data?.profile?.currentGoldPricePerGram}/g'),
+                  _buildSummaryRow(TokenStorage.translate("Gold Rate"), '₹${profileProvider.profileData?.data?.profile?.currentGoldPricePerGram}/g'),
                   const SizedBox(height: 12),
-                  _buildSummaryRow('Total Amount', '₹${widget.cashAmount.toStringAsFixed(0)}', isHighlight: true),
+                  _buildSummaryRow(TokenStorage.translate("Total Amount"), '₹${widget.cashAmount.toStringAsFixed(0)}', isHighlight: true),
                 ],
               ),
             ),
@@ -189,7 +189,8 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
             const SizedBox(height: 24),
 
             // 🔸 Payment Breakdown
-            Text('Payment Breakdown', style: AppTextStyles.labelText),
+            Text(TokenStorage.translate("Payment Breakdown")
+                , style: AppTextStyles.labelText),
             const SizedBox(height: 12),
 
         Container(
@@ -203,32 +204,32 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              _buildDetailRow('Gold (Grams)', goldData?.grams ?? "0"),
+              _buildDetailRow(TokenStorage.translate("Gold (Grams)"), goldData?.grams ?? "0"),
               const SizedBox(height: 12),
 
-              _buildDetailRow('Gold Price / Gram', '₹${goldData?.goldPricePerGram ?? "0"}'),
+              _buildDetailRow(TokenStorage.translate("Gold Price / Gram"), '₹${goldData?.goldPricePerGram ?? "0"}'),
               const SizedBox(height: 12),
 
-              _buildDetailRow('Gross Amount', '₹${goldData?.grossAmount ?? "0"}'),
+              _buildDetailRow(TokenStorage.translate("Gross Amount"), '₹${goldData?.grossAmount ?? "0"}'),
               const SizedBox(height: 12),
 
-              _buildDetailRow('GST (${goldData?.gstPercentage ?? "0"}%)', '₹${goldData?.gstAmount ?? "0"}'),
+              _buildDetailRow('${TokenStorage.translate("GST")} (${goldData?.gstPercentage ?? "0"}%)', '₹${goldData?.gstAmount ?? "0"}'),
               const SizedBox(height: 12),
 
-              _buildDetailRow('TDS (${goldData?.tdsPercentage ?? "0"}%)', '₹${goldData?.tdsAmount ?? "0"}'),
+              _buildDetailRow('${TokenStorage.translate("TDS")} (${goldData?.tdsPercentage ?? "0"}%)', '₹${goldData?.tdsAmount ?? "0"}'),
               const SizedBox(height: 12),
 
-              _buildDetailRow('TCS (${goldData?.tcsPercentage ?? "0"}%)', '₹${goldData?.tcsAmount ?? "0"}'),
+              _buildDetailRow('${TokenStorage.translate("TCS")} (${goldData?.tcsPercentage ?? "0"}%)', '₹${goldData?.tcsAmount ?? "0"}'),
               const SizedBox(height: 12),
 
-              _buildDetailRow('Total Deductions', '₹${goldData?.totalDeductions ?? "0"}'),
+              _buildDetailRow(TokenStorage.translate("Total Deductions"), '₹${goldData?.totalDeductions ?? "0"}'),
               const SizedBox(height: 12),
 
               const Divider(color: Colors.white12),
               const SizedBox(height: 12),
 
               _buildDetailRow(
-                'Net Amount Payable',
+                TokenStorage.translate("Net Amount Payable"),
                 '₹${goldData?.netAmount ?? "0"}',
                 isBold: true,
               ),
@@ -243,9 +244,9 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
 
             _buildPaymentMethodCard(
               icon: '📱',
-              title: 'UPI Payment',
-              subtitle: 'Pay via Google Pay, PhonePe, Paytm',
-              account: 'Instant & Secure',
+              title: TokenStorage.translate("UPI Payment"),
+              subtitle: TokenStorage.translate("Pay via Google Pay, PhonePe, Paytm"),
+              account: TokenStorage.translate("Instant & Secure"),
               isSelected: _selectedPaymentMethod == 0,
               onTap: () => setState(() => _selectedPaymentMethod = 0),
             ),
@@ -254,9 +255,9 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
 
             _buildPaymentMethodCard(
               icon: '🏦',
-              title: 'Net Banking',
-              subtitle: 'Pay via your bank account',
-              account: 'All major banks supported',
+              title: TokenStorage.translate( "Net Banking"),
+              subtitle: TokenStorage.translate("Pay via your bank account"),
+              account: TokenStorage.translate("All major banks supported"),
               isSelected: _selectedPaymentMethod == 1,
               onTap: () => setState(() => _selectedPaymentMethod = 1),
             ),
@@ -265,9 +266,9 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
 
             _buildPaymentMethodCard(
               icon: '💳',
-              title: 'Debit/Credit Card',
-              subtitle: 'Visa, Mastercard, RuPay',
-              account: 'Secure payment gateway',
+              title: TokenStorage.translate( "Debit/Credit Card"),
+              subtitle: TokenStorage.translate("Visa, Mastercard, RuPay"),
+              account: TokenStorage.translate("Visa, Mastercard, RuPay"),
               isSelected: _selectedPaymentMethod == 2,
               onTap: () => setState(() => _selectedPaymentMethod = 2),
             ),
@@ -276,8 +277,8 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
 
             _buildPaymentMethodCard(
               icon: '💰',
-              title: 'Meera Wallet',
-              subtitle: 'Pay from wallet balance',
+              title: TokenStorage.translate("Meera Wallet"),
+              subtitle: TokenStorage.translate("Pay from wallet balance"),
               account: 'Balance: ₹1,280',
               isSelected: _selectedPaymentMethod == 3,
               onTap: () => setState(() => _selectedPaymentMethod = 3),
@@ -300,7 +301,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Your payment is 100% secure. We use bank-grade 256-bit encryption to protect your data.',
+                      TokenStorage.translate("Your payment is 100% secure. We use bank-grade 256-bit encryption to protect your data."),
                       style: AppTextStyles.featureLabel.copyWith(color: Colors.green),
                     ),
                   ),
@@ -326,7 +327,7 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
                   ),
                 ),
                 child: Text(
-                  'Pay ₹${widget.cashAmount.toStringAsFixed(0)} & Buy Gold',
+                  '${TokenStorage.translate("Pay")} ₹${widget.cashAmount.toStringAsFixed(0)} & ${TokenStorage.translate("Buy Gold")}',
                   style: AppTextStyles.buttonText,
                 ),
               ),
@@ -442,8 +443,8 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

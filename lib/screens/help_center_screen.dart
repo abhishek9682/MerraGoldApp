@@ -63,7 +63,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Help Center',
+        title: Text( TokenStorage.translate("Help Center"),
             style: AppTextStyles.pageTitleHelp.copyWith(color: Colors.white)),
         centerTitle: true,
       ),
@@ -73,8 +73,8 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
         child:CustomLoader(),
       )
           : helpProvider.helpCenterResponse == null
-          ? const Center(
-        child: Text("Failed to load FAQ",
+          ? Center(
+        child: Text(  TokenStorage.translate("Failed to load FAQ"),
             style: TextStyle(color: Colors.white)),
       )
           : SingleChildScrollView(
@@ -215,9 +215,9 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
       ),
       child: Column(
         children: [
-          Text('Still Need Help?', style: AppTextStyles.contactTitle.copyWith(color: Colors.white)),
+          Text( TokenStorage.translate("Still Need Help?"),style: AppTextStyles.contactTitle.copyWith(color: Colors.white)),
           const SizedBox(height: 8),
-          Text('Our support team is here 24/7 to assist you',
+          Text(TokenStorage.translate("Our support team is here 24/7 to assist you"),
               textAlign: TextAlign.center,
               style: AppTextStyles.contactSubtitle.copyWith(color: Colors.white60)),
           const SizedBox(height: 24),
@@ -226,7 +226,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
             children: [
               _buildContactMethod(
                 icon: Icons.chat_bubble_outline,
-                label: 'Chat',
+                label:TokenStorage.translate("Chat"),
                 onTap: () {
                   String number = profileProvier.profileData!.data!.profile!.companyMobile!;
                   launchWhatsApp(number);
@@ -234,7 +234,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               ),
               _buildContactMethod(
                 icon: Icons.email_outlined,
-                label: 'Email',
+                label: TokenStorage.translate("Email"),
                 onTap: () {
                   String email = profileProvier.profileData!.data!.profile!.companyEmail!;
                   launchEmail(email);
@@ -242,7 +242,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
               ),
               _buildContactMethod(
                 icon: Icons.phone_outlined,
-                label: 'Call',
+                label: TokenStorage.translate("Call"),
                 onTap: () {
                   String number = profileProvier.profileData!.data!.profile!.companyMobile!;
                   launchCaller(number);
@@ -302,8 +302,8 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

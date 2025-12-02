@@ -82,7 +82,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         },
       ),
       title: Text(
-        'Transaction History',
+        TokenStorage.translate("Transaction History"),
         style: GoogleFonts.poppins(
             fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
       ),
@@ -128,10 +128,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
       child: Row(
         children: [
-          _tab('All'),
-          _tab('Buy'),
-          _tab('Sell'),
-          _tab('Rewards'),
+          _tab(TokenStorage.translate("All")),
+          _tab(TokenStorage.translate("Buy")),
+          _tab(TokenStorage.translate("Sell")),
+          _tab(TokenStorage.translate("rewards")),
         ],
       ),
     );
@@ -182,7 +182,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return ListTile(
       onTap: () {
         _details({
-          "title": isBuy ? "Gold Purchase" : "Gold Sell",
+          "title": TokenStorage.translate(isBuy ? "Gold Purchase" : "Gold Sell"),
           "amount": txn.amount.toString(),
           "gold": txn.remarks ?? "",
           "id": txn.trxId ?? "",
@@ -195,7 +195,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         color: isBuy ? Colors.green : Colors.red,
       ),
       title: Text(
-        isBuy ? "Gold Purchase" : "Gold Sell",
+        TokenStorage.translate(isBuy ? "Gold Purchase" : "Gold Sell"),
         style: const TextStyle(color: Colors.white),
       ),
       subtitle: Text(
@@ -213,16 +213,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return ListTile(
       onTap: () {
         _details({
-          "title": "Reward",
+          "title": TokenStorage.translate("Reward"),
           "amount": txn.amount.toString(),
           "reason": txn.remarks ?? "",
           "date": txn.createdAt ?? "",
           "id": txn.trxId ?? "",
-          "status": "Reward",
+          "status": TokenStorage.translate("Reward"),
         });
       },
       leading: const Icon(Icons.card_giftcard, color: Colors.blueAccent),
-      title: Text(txn.remarks ?? "Reward",
+      title: Text(TokenStorage.translate(txn.remarks ?? "Reward"),
           style: const TextStyle(color: Colors.white)),
       subtitle: Text(txn.createdAt ?? "",
           style: const TextStyle(color: Colors.white38)),
@@ -232,8 +232,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget _emptyState() {
-    return const Center(
-      child: Text("No transactions found", style: TextStyle(color: Colors.white)),
+    return  Center(
+      child: Text(TokenStorage.translate("No transactions found"), style: TextStyle(color: Colors.white)),
     );
   }
 
@@ -248,16 +248,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
           padding: const EdgeInsets.all(20),
           child: Wrap(
             children: [
-              Text("Transaction Details",
+              Text( TokenStorage.translate("Transaction Details"),
                   style: GoogleFonts.poppins(
                       fontSize: 18, color: Colors.white)),
               const SizedBox(height: 20),
-              _detail("Type", data["title"]),
-              _detail("Amount", "₹${data['amount']}"),
+              _detail(TokenStorage.translate("Type"), data["title"]),
+              _detail(TokenStorage.translate("Request Amount"), "₹${data['amount']}"),
               if (data["gold"] != null) _detail("Gold", data["gold"]),
-              _detail("Transaction ID", data["id"]),
+              _detail(TokenStorage.translate( "Transaction ID"), data["id"]),
               _detail("Date", data["date"]),
-              _detail("Status", data["status"]),
+              _detail(TokenStorage.translate("Status"), data["status"]),
             ],
           ),
         );
@@ -271,8 +271,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(k, style: const TextStyle(color: Colors.white54)),
-          Text(v, style: const TextStyle(color: Colors.white)),
+          Expanded(child: Text(k, style: const TextStyle(color: Colors.white54))),
+          Expanded(child: Text(v, style: const TextStyle(color: Colors.white))),
         ],
       ),
     );
@@ -344,9 +344,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, TokenStorage.translate('Profile')),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

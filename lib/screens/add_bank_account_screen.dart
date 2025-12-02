@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/controllers/profile_details.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/add_bank_account.dart';
@@ -144,7 +145,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Add Bank Account', style: AppTextStyles.appBarTitle),
+        title: Text(TokenStorage.translate('Add Bank Account'), style: AppTextStyles.appBarTitle),
         centerTitle: true,
       ),
       body: Consumer<BankAccountProvider>(
@@ -165,23 +166,23 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Bank Details', style: AppTextStyles.sectionTitle),
+          Text(TokenStorage.translate('Bank Details'), style: AppTextStyles.sectionTitle),
           const SizedBox(height: 20),
-          _buildTextField("BANK NAME", _bankNameController, Icons.account_balance, "Enter bank name"),
+          _buildTextField(TokenStorage.translate("BANK NAME"), _bankNameController, Icons.account_balance, "Enter bank name"),
           const SizedBox(height: 16),
-          _buildTextField("ACCOUNT HOLDER NAME", _accountHolderController, Icons.person_outline, "As per bank records"),
+          _buildTextField(TokenStorage.translate("ACCOUNT HOLDER NAME"), _accountHolderController, Icons.person_outline, "As per bank records"),
           const SizedBox(height: 16),
-          _buildTextField("ACCOUNT NUMBER", _accountNumberController, Icons.credit_card, "Enter account number",
+          _buildTextField(TokenStorage.translate("ACCOUNT NUMBER"), _accountNumberController, Icons.credit_card, "Enter account number",
               keyboardType: TextInputType.number, maxLength: 12),
           const SizedBox(height: 16),
-          _buildTextField("CONFIRM ACCOUNT NUMBER", _confirmAccountController, Icons.credit_card, "Re-enter number",
+          _buildTextField(TokenStorage.translate("CONFIRM ACCOUNT NUMBER"), _confirmAccountController, Icons.credit_card, "Re-enter number",
               keyboardType: TextInputType.number, maxLength: 12),
           const SizedBox(height: 16),
-          _buildTextField("IFSC CODE", _ifscController, Icons.numbers, "Enter IFSC", maxLength: 11),
+          _buildTextField(TokenStorage.translate("IFSC CODE"), _ifscController, Icons.numbers, "Enter IFSC", maxLength: 11),
           const SizedBox(height: 16),
           _buildAccountTypeDropdown(),
           const SizedBox(height: 16),
-          _buildTextField("BRANCH NAME", _branchController, Icons.business, "Optional"),
+          _buildTextField(TokenStorage.translate("BRANCH NAME"), _branchController, Icons.business, "Optional"),
           const SizedBox(height: 32),
           _buildSubmitButton(),
           const SizedBox(height: 40),
@@ -227,7 +228,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("ACCOUNT TYPE", style: AppTextStyles.labelText),
+        Text(TokenStorage.translate("ACCOUNT TYPE"), style: AppTextStyles.labelText),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -241,7 +242,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
               value: _selectedAccountType, // FIXED
               dropdownColor: const Color(0xFF1A1A1A),
               isExpanded: true,
-              hint: Text("Select account type", style: AppTextStyles.body14White70),
+              hint: Text(TokenStorage.translate("Select account type"), style: AppTextStyles.body14White70),
               items: const [
                 DropdownMenuItem(value: "savings", child: Text("Savings Account", style: TextStyle(color: Colors.white))),
                 DropdownMenuItem(value: "current", child: Text("Current Account", style: TextStyle(color: Colors.white))),
@@ -285,10 +286,10 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, "Home"),
-              _buildNavItem(1, Icons.account_balance_wallet, "Wallet"),
-              _buildNavItem(2, Icons.history, "History"),
-              _buildNavItem(3, Icons.person, "Profile"),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

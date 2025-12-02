@@ -7,7 +7,8 @@ import '../utils/token_storage.dart';
 
 class LanguageDataProvider with ChangeNotifier {
   ApiClient appClient = ApiClient();
-
+  String get langIs =>_langIs;
+  String _langIs="";
   bool _isSelected = false;
   bool get isSelected => _isSelected;
   Map<String, dynamic> langData = {};
@@ -19,15 +20,10 @@ class LanguageDataProvider with ChangeNotifier {
 
 
       if (response != null) {
-
-        // Convert Map<String, dynamic> → Map<String, String>
-        langData = response.map<String, String>((key, value) {
-          return MapEntry(key.toString(), value.toString());
-        });
-
-        String jsonData=jsonEncode(langData); // json because share_prefered use json
-        TokenStorage.saveLang(jsonData.toString());
-        print("Converted langData -------- $jsonData");
+        String jsonData=jsonEncode(response); // json because share_prefered use json
+        TokenStorage.saveLang(jsonData);
+        TokenStorage.saveLan(id);
+        TokenStorage.init();
       }
 
       notifyListeners();

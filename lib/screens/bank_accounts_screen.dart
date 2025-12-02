@@ -52,13 +52,13 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
       loadBankData();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Primary account updated', style: GoogleFonts.poppins()),
+          content: Text(TokenStorage.translate("Primary account updated"), style: GoogleFonts.poppins()),
           backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+          .showSnackBar(SnackBar(content: Text('${TokenStorage.translate("Error")}: $e')));
     } finally {
       if (mounted) setState(() => _loadingAction = false);
     }
@@ -69,8 +69,8 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
 
     if (isPrimary) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Can't delete primary account."),
+         SnackBar(
+          content: Text(TokenStorage.translate("Can't delete primary account.")),
           backgroundColor: Colors.orange,
         ),
       );
@@ -84,12 +84,12 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(TokenStorage.translate("Remove"),
             style: GoogleFonts.poppins(color: Colors.white)),
-        content: Text("Are you sure?",
+        content: Text(TokenStorage.translate("Are you sure?"),
             style: GoogleFonts.poppins(color: Colors.white70)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel", style: TextStyle(color: Colors.white60)),
+            child: Text(TokenStorage.translate("Cancel"), style: TextStyle(color: Colors.white60)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -115,7 +115,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Bank removed successfully",
+            content: Text(TokenStorage.translate( "Bank removed successfully"),
                 style: GoogleFonts.poppins()),
             backgroundColor: Colors.red,
           ),
@@ -186,10 +186,10 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.edit, size: 14, color: Colors.white),
                       SizedBox(width: 4),
-                      Text("Edit", style: TextStyle(color: Colors.white, fontSize: 12)),
+                      Text(TokenStorage.translate("Edit"), style: TextStyle(color: Colors.white, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -206,24 +206,24 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                 color: Colors.amber.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
-                "PRIMARY ACCOUNT",
+              child: Text(
+               TokenStorage.translate("PRIMARY ACCOUNT"),
                 style: TextStyle(color: Colors.amber, fontSize: 12, fontWeight: FontWeight.w600),
               ),
             ),
           const SizedBox(height: 12),
 
-          Text("Account Number", style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
+          Text(TokenStorage.translate("Account Number"), style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
           Text(bank.accountNumber ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
 
           const SizedBox(height: 8),
 
-          Text("IFSC Code", style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
+          Text(TokenStorage.translate("IFSC Code"), style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
           Text(bank.ifscCode ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
 
           const SizedBox(height: 8),
 
-          Text("Branch", style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
+          Text(TokenStorage.translate("Branch"), style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
           Text(bank.branchName ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
 
           const SizedBox(height: 20),
@@ -235,7 +235,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                 child: OutlinedButton(
                   onPressed: isPrimary ? null : () => _setPrimary(provider, bank.id!),
                   child: Text(
-                    "Set Primary ",
+                    TokenStorage.translate(TokenStorage.translate("Set Primary")),
                     style: TextStyle(
                       color: isPrimary ? Colors.white38 : Colors.amber,
                     ),
@@ -286,7 +286,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
           padding: const EdgeInsets.all(20),
           children: [
             if (banks.isEmpty)
-              Text("No bank accounts yet", style: GoogleFonts.poppins(color: Colors.white60))
+              Text(TokenStorage.translate("No bank accounts yet"), style: GoogleFonts.poppins(color: Colors.white60))
             else
               ...List.generate(banks.length,
                       (i) => Padding(
@@ -319,7 +319,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                   elevation: 8,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
-                child: Text("Add Bank Account", style: AppTextStyles.buttonText),
+                child: Text(TokenStorage.translate("Add Bank Account"), style: AppTextStyles.buttonText),
               ),
             ),
             SizedBox( height:10),

@@ -120,9 +120,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return TokenStorage.translate("greeting_morning");
+    if (hour < 17) return TokenStorage.translate("greeting_afternoon");
+    return TokenStorage.translate("greeting_evening");
 
   }
 
@@ -271,7 +271,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        "Today's Gold Rate",
+                        TokenStorage.translate("today_gold_rate"),
                         style: GoogleFonts.poppins(
                           fontSize: 13,
                           color: Colors.white70,
@@ -292,7 +292,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     Text(
-                      ' /gram',
+                      TokenStorage.translate("/per_gram"),
                       style: GoogleFonts.poppins(
                         fontSize: 13,
                         color: Colors.white60,
@@ -333,7 +333,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            TokenStorage.translate("Wallet Balance" ),
+            TokenStorage.translate("wallet_balance" ),
             style: GoogleFonts.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -358,7 +358,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Gold Owned',
+                   TokenStorage.translate("gold_owned"),
                     style: GoogleFonts.poppins(
                       fontSize: 13,
                       color: const Color(0xFF0A0A0A).withOpacity(0.7),
@@ -399,7 +399,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Quick Invest',
+                TokenStorage.translate("quick_invest"),
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -407,7 +407,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
               Text(
-                'Custom →',
+                '${TokenStorage.translate('custom')} ',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: const Color(0xFFFFD700),
@@ -417,30 +417,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: List.generate(_investmentAmounts.length, (index) {
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,      // 🔥 EXACTLY 3 per row
+              crossAxisSpacing: 12,   // spacing between columns
+              mainAxisSpacing: 12,    // spacing between rows
+              childAspectRatio: 1.1,  // adjust card height/width
+            ),
+            itemCount: _investmentAmounts.length,
+            itemBuilder: (context, index) {
               final isSelected = _selectedAmount == index;
+
               return InkWell(
                 onTap: () {
                   setState(() {
                     _selectedAmount = index;
-                    amount=_investmentAmounts[_selectedAmount]['amount']!;
-                    amount = amount.replaceAll("₹", "").trim();
+                    amount = _investmentAmounts[index]['amount']!
+                        .replaceAll("₹", "")
+                        .trim();
                   });
-
                 },
                 child: Container(
-                  width: (MediaQuery.of(context).size.width - 88) / 3,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xFFFFD700)
-                        : const Color(0xFF1A1A1A),
+                    color: isSelected ? const Color(0xFFFFD700) : const Color(0xFF1A1A1A),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
@@ -457,9 +459,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? const Color(0xFF0A0A0A)
-                              : Colors.white,
+                          color: isSelected ? const Color(0xFF0A0A0A) : Colors.white,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -476,8 +476,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
               );
-            }),
+            },
           ),
+
+
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -506,7 +508,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.diamond, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    'Buy Gold Now',
+                    TokenStorage.translate("buy_gold_now"),
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -529,7 +531,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Explore',
+              TokenStorage.translate("explore"),
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -546,8 +548,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Expanded(
                 child: _buildExploreCard(
                   icon: '🏆',
-                  title: 'Rewards',
-                  subtitle: 'Earn cashback',
+                  title: TokenStorage.translate('rewards'),
+                  subtitle: TokenStorage.translate("earn_cashback"),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -562,8 +564,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Expanded(
                 child: _buildExploreCard(
                   icon: '🏪',
-                  title: 'Nearby Vendors',
-                  subtitle: 'Find partner stores',
+                  title: TokenStorage.translate("nearby_vendors"),
+                  subtitle: TokenStorage.translate("find_partner_stores"),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -632,7 +634,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                TokenStorage.translate("Investment Plan"),
+                TokenStorage.translate("investment_plan"),
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -652,7 +654,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   );
                 },
                 child: Text(
-                  TokenStorage.translate("View all"),
+                  TokenStorage.translate("view_all"),
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     color: const Color(0xFFFFD700),
@@ -820,8 +822,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

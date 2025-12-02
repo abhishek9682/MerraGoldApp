@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goldproject/controllers/profile_details.dart';
 import 'package:goldproject/screens/personal_details_screen.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../controllers/InvestmentPlansProvider.dart';
@@ -134,7 +135,7 @@ class PlanDetailScreen extends StatelessWidget {
         const SizedBox(height: 24),
 
         Text(
-          "Plan Features",
+          TokenStorage.translate("Plan Features"),
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -158,7 +159,7 @@ class PlanDetailScreen extends StatelessWidget {
         const SizedBox(height: 32),
 
         Text(
-          "Why Choose This Plan?",
+          TokenStorage.translate("Why Choose This Plan?"),
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -169,26 +170,26 @@ class PlanDetailScreen extends StatelessWidget {
 
         _buildBenefitItem(
           Icons.security,
-          'Secure Investment',
-          '100% safe and insured gold storage',
+          TokenStorage.translate('Secure Investment'),
+         TokenStorage.translate( '100% safe and insured gold storage'),
           color,
         ),
         _buildBenefitItem(
           Icons.trending_up,
-          'Growth Potential',
+          TokenStorage.translate('Growth Potential'),
           'Historical returns of ${plan.runtimeType ?? 'N/A'}',
           color,
         ),
         _buildBenefitItem(
           Icons.mobile_friendly,
-          'Easy Management',
-          'Track and manage from mobile app',
+          TokenStorage.translate("Growth Potential"),
+          TokenStorage.translate("Track and manage from mobile app"),
           color,
         ),
         _buildBenefitItem(
           Icons.account_balance_wallet,
-          'Flexible Withdrawals',
-          'Redeem anytime after lock-in period',
+          TokenStorage.translate('Flexible Withdrawals'),
+          TokenStorage.translate('Redeem anytime after lock-in period'),
           color,
         ),
 
@@ -209,7 +210,7 @@ class PlanDetailScreen extends StatelessWidget {
                   const Icon(Icons.info_outline, color: Colors.orange, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    "Important Information",
+                    TokenStorage.translate("Important Information"),
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -221,11 +222,11 @@ class PlanDetailScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               Text(
-                "• Gold prices are subject to market fluctuations\n"
-                    "• Minimum lock-in period: \n"
-                    "• GST applicable as per government norms\n"
-                    "• Returns are indicative and not guaranteed\n"
-                    "• Terms and conditions apply",
+                "• ${TokenStorage.translate("Gold prices are subject to market fluctuations")}\n"
+                    "• ${TokenStorage.translate("Minimum lock-in period")}: \n"
+                    "• ${TokenStorage.translate("GST applicable as per government norms")}\n"
+                    "• ${TokenStorage.translate("Returns are indicative and not guaranteed")}\n"
+                    "• ${TokenStorage.translate( "Terms and conditions apply")}",
                 style: GoogleFonts.poppins(
                   fontSize: 12,
                   color: Colors.white70,
@@ -293,7 +294,7 @@ class PlanDetailScreen extends StatelessWidget {
               Icon(isSubscribed ? Icons.history : Icons.lock_open),
               const SizedBox(width: 10),
               Text(
-                isSubscribed ? "Transaction History" : "Enroll Now",
+                isSubscribed ? TokenStorage.translate("Transaction History") : "Enroll Now",
                 style: GoogleFonts.poppins(
                     fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -320,7 +321,7 @@ class PlanDetailScreen extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Active Plan",
+            Text(TokenStorage.translate("Active"),
                 style: GoogleFonts.poppins(
                     color: Colors.green, fontWeight: FontWeight.w600)),
             Text("You are subscribed to this plan",
@@ -519,7 +520,8 @@ class PlanDetailScreen extends StatelessWidget {
                             backgroundColor: Colors.red,
                             content: Text(
                                 "Not Enrolled: ${enrollProvider.message}",
-                                style: GoogleFonts.poppins()),
+                                style: GoogleFonts.poppins(),
+                            ),
                           ),
                         );
 

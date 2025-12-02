@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +24,34 @@ class _NearbyVendorsScreenState extends State<NearbyVendorsScreen> {
     super.initState();
     Provider.of<MerchantProvider>(context, listen: false).fetchMerchants();
   }
+
+  // ---------------- OPEN PHONE DIALER -----------------
+  Future<void> _callPhone(String phone) async {
+    if (phone.isEmpty || phone == "N/A") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Phone number not available")),
+      );
+      return;
+    }
+
+    final Uri phoneUri = Uri(scheme: 'tel', path: phone);
+
+    try {
+      final bool launched = await launchUrl(
+        phoneUri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched) {
+        await launchUrl(phoneUri, mode: LaunchMode.platformDefault);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Could not open dialer")),
+      );
+    }
+  }
+
 
   // ---------------------------------------------------------
   // ---------------- OPEN GOOGLE MAPS ------------------------
@@ -123,7 +152,7 @@ class _NearbyVendorsScreenState extends State<NearbyVendorsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Nearby Vendors',
+          TokenStorage.translate("nearby_vendors"),
           style: AppTextStyles.pageTitleHelp.copyWith(color: Colors.white),
         ),
         centerTitle: true,
@@ -212,16 +241,19 @@ class _NearbyVendorsScreenState extends State<NearbyVendorsScreen> {
                     style: AppTextStyles.subHeading.copyWith(
                         color: Colors.white70, height: 1.4)),
                 const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.phone,
-                        size: 14, color: Color(0xFFFFD700)),
-                    const SizedBox(width: 6),
-                    Text(phone,
-                        style: AppTextStyles.subHeading
-                            .copyWith(color: Colors.white70)),
-                  ],
+                InkWell(
+                  onTap: () => _callPhone(phone),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.phone, size: 14, color: Color(0xFFFFD700)),
+                      const SizedBox(width: 6),
+                      Text(phone,
+                          style: AppTextStyles.subHeading
+                              .copyWith(color: Colors.white70, decoration: TextDecoration.underline)),
+                    ],
+                  ),
                 ),
+
                 const SizedBox(height: 6),
 
                 // EMAIL ROW

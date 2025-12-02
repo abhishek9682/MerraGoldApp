@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../compenent/custom_style.dart';
 import '../helpers/security_storage.dart';
+import '../utils/token_storage.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
 import 'history_screen.dart';
@@ -136,7 +137,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
         // Save to secure storage
         await SecurityStorage.enableBiometric(newValue);
-
         setState(() => _biometricEnabled = newValue);
 
         // message
@@ -202,10 +202,10 @@ class _SecurityScreenState extends State<SecurityScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

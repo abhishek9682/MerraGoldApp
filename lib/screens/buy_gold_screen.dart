@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/buy_gold.dart';
+import '../controllers/gold_data.dart';
 import '../controllers/sell_gold.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
@@ -46,9 +47,9 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
 
 
   loadData() {
+    Provider.of<GoldDetails>(context,listen: false);
     final profileProvider = Provider.of<ProfileDetailsProvider>(context, listen: false);
-    final goldRatePerGramString =
-        profileProvider.profileData?.data?.profile?.currentGoldPricePerGram ?? '0';
+    final goldRatePerGramString = profileProvider.profileData?.data?.profile?.currentGoldPricePerGram ?? '0';
     profileData=profileProvider.profileData!.data!;
 
     goldRatePerGram = double.tryParse(goldRatePerGramString) ?? 0;
@@ -104,10 +105,28 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
     }
   }
 
-  double _calculateGold() {
+  double? _calculateGold() {
     final amount = double.tryParse(_amountController.text) ?? 0;
-    return amount / goldRatePerGram;
+
+    final provider = Provider.of<GoldDetails>(context, listen: false);
+    Map<String, String> body = {
+      "type": "inr_to_grams",
+      "amount": "$amount"
+    };
+
+    provider.goldDetails(body);
+
+    final response = provider.goldCalculationResponse;
+
+    if (response == null ||
+        response.data == null ||
+        response.data!.grams == null) {
+      return 0.0; // return default instead of crashing
+    }
+
+    return double.tryParse(response.data!.grams!) ?? 0.0;
   }
+
 
   void _selectQuickAmount(int index) {
     setState(() {
@@ -123,7 +142,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
     if (amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please enter a valid amount'),
+          content: Text(TokenStorage.translate('Please enter a valid amount')),
           backgroundColor: Colors.red,
         ),
       );
@@ -150,16 +169,17 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
           context,
           MaterialPageRoute(
             builder: (_) => BuyGoldPaymentScreen(
-              goldAmount: _calculateGold(),
+              goldAmount: _calculateGold() ??0.0,
               cashAmount: amount,
             ),
           ),
         );
+        print("cashamount----> $amount=========goldamount------->${_calculateGold()}");
       // }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong!".toUpperCase()),
+          content: Text(TokenStorage.translate("Something went wrong!").toUpperCase()),
           backgroundColor: Colors.red,
         ),
       );
@@ -181,7 +201,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Buy Gold',
+         TokenStorage.translate( 'Buy Gold'),
           style: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.w600,
@@ -240,7 +260,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Today's Gold Rate",
+              Text(TokenStorage.translate("Today's Gold Rate"),
                   style: GoogleFonts.poppins(
                       color: Colors.white70, fontSize: 13)),
               const SizedBox(height: 8),
@@ -252,7 +272,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
                   color: const Color(0xFFFFD700),
                 ),
               ),
-              Text('per gram • 24K Pure',
+              Text(TokenStorage.translate('per gram • 24K Pure'),
                   style: GoogleFonts.poppins(
                       color: Colors.white54, fontSize: 12)),
             ],
@@ -283,8 +303,8 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _holdingColumn('Current Holdings', '${provider.profileData?.data?.profile?.goldBalance}g', Colors.white),
-          _holdingColumn('Portfolio Value',
+          _holdingColumn(TokenStorage.translate('Current Holdings'), '${provider.profileData?.data?.profile?.goldBalance}g', Colors.white),
+          _holdingColumn(TokenStorage.translate('Portfolio Value'),
               '₹${provider.profileData?.data?.profile?.goldBalanceValue}', const Color(0xFFFFD700)),
         ],
       ),
@@ -322,7 +342,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       ),
       child: Column(
         children: [
-          Text('Enter Investment Amount', style: AppTextStyles.bodyText),
+          Text(TokenStorage.translate('Enter Investment Amount'), style: AppTextStyles.bodyText),
 
           const SizedBox(height: 16),
           Row(
@@ -353,7 +373,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Text('= ${_calculateGold().toStringAsFixed(3)} grams',
+          Text('= ${_calculateGold()?.toString()} grams',
               style: GoogleFonts.poppins(
                   color: const Color(0xFFFFD700),
                   fontWeight: FontWeight.w600)),
@@ -366,52 +386,65 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Quick Select Amount',
+        Text(TokenStorage.translate('Quick Select Amount'),
             style: GoogleFonts.poppins(
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16)),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: List.generate(_quickAmounts.length, (index) {
-            final isSelected = _selectedQuickAmount == index;
-            return InkWell(
-              onTap: () => _selectQuickAmount(index),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFFFFD700).withOpacity(0.15)
-                      : const Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: isSelected
-                          ? const Color(0xFFFFD700)
-                          : Colors.white.withOpacity(0.1),
-                      width: 2),
-                  boxShadow: isSelected
-                      ? [
-                    BoxShadow(
-                      color: const Color(0xFFFFD700).withOpacity(0.3),
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                    )
-                  ]
-                      : [],
-                ),
-                child: Column(
-                  children: [
-                    Text('₹${_quickAmounts[index]['amount']}', style: AppTextStyles.bodyText.copyWith(color: isSelected ? const Color(0xFFFFD700) : Colors.white, fontWeight: FontWeight.bold)),
-                    Text('${_quickAmounts[index]['gold']}g', style: AppTextStyles.labelText.copyWith(color: Colors.white54)),
+    GridView.count(
+    crossAxisCount: 3,      // 🔥 ALWAYS 3 items in a row
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    mainAxisSpacing: 12,
+    crossAxisSpacing: 12,
+    children: List.generate(_quickAmounts.length, (index) {
+    final isSelected = _selectedQuickAmount == index;
 
-                  ],
-                ),
-              ),
-            );
-          }),
-        ),
+    return InkWell(
+    onTap: () => _selectQuickAmount(index),
+    child: AnimatedContainer(
+    duration: const Duration(milliseconds: 200),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    decoration: BoxDecoration(
+    color: isSelected
+    ? const Color(0xFFFFD700).withOpacity(0.15)
+        : const Color(0xFF1A1A1A),
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(
+    color: isSelected
+    ? const Color(0xFFFFD700)
+        : Colors.white.withOpacity(0.1),
+    width: 2,
+    ),
+    boxShadow: isSelected
+    ? [
+    BoxShadow(
+    color: const Color(0xFFFFD700).withOpacity(0.3),
+    blurRadius: 10,
+    spreadRadius: 1,
+    )
+    ]
+        : [],
+    ),
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    Text(
+    '₹${_quickAmounts[index]['amount']}',
+    style: AppTextStyles.bodyText.copyWith(
+    color: isSelected ? const Color(0xFFFFD700) : Colors.white,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    Text(
+    '${_quickAmounts[index]['gold']}g',
+    style: AppTextStyles.labelText.copyWith(color: Colors.white54),
+    ),
+    ],
+    ),
+    ),
+    );
+    }),
+    )
       ],
     );
   }
@@ -420,23 +453,23 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Why Invest in Gold?',
+        Text(TokenStorage.translate('Why Invest in Gold?'),
             style: GoogleFonts.poppins(
                 color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16)),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _benefitCard('🔒', 'Safe & Secure')),
+            Expanded(child: _benefitCard('🔒', TokenStorage.translate('Safe & Secure'))),
             const SizedBox(width: 12),
-            Expanded(child: _benefitCard('📈', 'High Returns')),
+            Expanded(child: _benefitCard('📈', TokenStorage.translate('High Returns'))),
           ],
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _benefitCard('💰', 'Zero Charges')),
+            Expanded(child: _benefitCard('💰',  TokenStorage.translate('Zero Charges'))),
             const SizedBox(width: 12),
-            Expanded(child: _benefitCard('✨', '99.99% Pure')),
+            Expanded(child: _benefitCard('✨',TokenStorage.translate('99.99% Pure'))),
           ],
         ),
       ],
@@ -487,7 +520,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
           const SizedBox(width: 12),
           Expanded(
             child:Text(
-              '3% GST will be added as per government regulations. Your gold will be securely stored in insured vaults.',
+              TokenStorage.translate("3% GST will be added as per government regulations. Your gold will be securely stored in insured vaults."),
               style: AppTextStyles.bodyText.copyWith(color: const Color(0xFFFFD700), height: 1.5),
             )
 
@@ -511,7 +544,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
-        child: Text('Proceed to Payment', style: AppTextStyles.buttonText),
+        child: Text(TokenStorage.translate('Proceed to Payment'), style: AppTextStyles.buttonText),
 
 
     ),
@@ -531,8 +564,8 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

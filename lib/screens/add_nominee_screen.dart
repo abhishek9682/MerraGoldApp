@@ -34,15 +34,15 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
   String? _selectedRelation;
 
   final List<String> _relationItems = [
-    'Father',
-    'Wife',
-    'Mother',
-    'Spouse',
-    'Son',
-    'Daughter',
-    'Brother',
-    'Sister',
-    'Other',
+  TokenStorage.translate('Father'),
+  TokenStorage.translate('Wife'),
+  TokenStorage.translate('Mother'),
+  TokenStorage.translate('Spouse'),
+  TokenStorage.translate('Son'),
+  TokenStorage.translate('Daughter'),
+  TokenStorage.translate('Brother'),
+  TokenStorage.translate('Sister'),
+  TokenStorage.translate('Other'),
   ];
 
   @override
@@ -102,45 +102,49 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
     final relationType = _fathermotherController.text.trim();
 
     if (name.isEmpty) {
-      _showSnack("Please enter nominee name");
+      _showSnack(TokenStorage.translate("Please enter nominee name"));
       return false;
     }
 
     if (_selectedRelation == null || _selectedRelation!.isEmpty) {
-      _showSnack("Please select relationship");
+      _showSnack(TokenStorage.translate("Please select relationship"));
       return false;
     }
 
     if (relationType.isEmpty) {
-      _showSnack("Please enter relation type (e.g. S/O, D/O, W/O)");
+      _showSnack(TokenStorage.translate("Please enter relation type (e.g. S/O, D/O, W/O)"));
       return false;
     }
 
     if (mobile.isEmpty) {
-      _showSnack("Please enter mobile number");
+      _showSnack(TokenStorage.translate("Please enter mobile number"));
       return false;
     }
     if (!RegExp(r'^[0-9]{10}$').hasMatch(mobile)) {
-      _showSnack("Mobile number must be 10 digits");
+      _showSnack(TokenStorage.translate("Mobile number must be 10 digits"));
       return false;
     }
 
     if (ageStr.isEmpty) {
-      _showSnack("Please enter nominee age");
+      _showSnack(TokenStorage.translate("Please enter nominee age")
+      );
       return false;
     }
     final age = int.tryParse(ageStr);
     if (age == null || age <= 0 || age > 120) {
-      _showSnack("Please enter a valid age between 1 and 120");
+      _showSnack(TokenStorage.translate("Please enter a valid age between 1 and 120")
+      );
       return false;
     }
 
     if (aadhaar.isEmpty) {
-      _showSnack("Please enter Aadhaar number");
+      _showSnack(TokenStorage.translate("Please enter Aadhaar number")
+      );
       return false;
     }
     if (!RegExp(r'^[0-9]{12}$').hasMatch(aadhaar)) {
-      _showSnack("Aadhaar number must be 12 digits");
+      _showSnack(TokenStorage.translate("Aadhaar number must be 12 digits")
+      );
       return false;
     }
 
@@ -194,13 +198,13 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
       if (success) {
         _showSnack(
           _isEditing
-              ? "Nominee updated successfully"
-              : "Nominee added successfully",
+              ?TokenStorage.translate("Nominee updated successfully")
+              : TokenStorage.translate("Nominee added successfully"),
           success: true,
         );
         Navigator.pop(context, true); // pass true if you want to refresh list
       } else {
-        _showSnack(provider.message??"Failed to save nominee details");
+        _showSnack(provider.message??TokenStorage.translate("Failed to save nominee details"));
       }
     // } catch (e) {
     //   if (!mounted) return;
@@ -270,7 +274,7 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Text("Upload nominee's photo", style: AppTextStyles.subHeading),
+          Text(TokenStorage.translate("Upload nominee's photo"), style: AppTextStyles.subHeading),
         ],
       ),
     );
@@ -280,13 +284,14 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Personal Information', style: AppTextStyles.heading),
+        Text(TokenStorage.translate('Personal Information'), style: AppTextStyles.subHeading1),
         const SizedBox(height: 20),
 
         _buildTextField(
           label: TokenStorage.translate("Your Name"),
           controller: _nameController,
-          hint: "Enter full name",
+          hint: TokenStorage.translate("Enter full name")
+          ,
           icon: Icons.person,
         ),
         const SizedBox(height: 16),
@@ -295,17 +300,17 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
         const SizedBox(height: 16),
 
         _buildTextField(
-          label: "Relation Type",
+          label: TokenStorage.translate("Relation Type"),
           controller: _fathermotherController,
-          hint: "Father/Husband name or type",
+          hint: TokenStorage.translate("Father/Husband name or type"),
           icon: Icons.person_pin_outlined,
         ),
         const SizedBox(height: 16),
 
         _buildTextField(
-          label: "MOBILE NUMBER",
+          label: TokenStorage.translate("MOBILE NUMBER"),
           controller: _mobileController,
-          hint: "Enter mobile number",
+          hint: TokenStorage.translate("Enter mobile number"),
           icon: Icons.phone_android,
           maxLength: 10,
           keyboardType: TextInputType.phone,
@@ -313,9 +318,9 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
         const SizedBox(height: 16),
 
         _buildTextField(
-          label: "NOMINEE AGE",
+          label: TokenStorage.translate("NOMINEE AGE"),
           controller: _ageController,
-          hint: "Enter age",
+          hint: TokenStorage.translate("Enter age"),
           icon: Icons.person_add,
           maxLength: 3,
           keyboardType: TextInputType.number,
@@ -323,9 +328,9 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
         const SizedBox(height: 16),
 
         _buildTextField(
-          label: "AADHAAR NUMBER",
+          label: TokenStorage.translate("AADHAAR NUMBER"),
           controller: _aadhaarController,
-          hint: "Enter Aadhaar number",
+          hint:TokenStorage.translate("Enter Aadhaar number"),
           icon: Icons.credit_card,
           maxLength: 12,
           keyboardType: TextInputType.number,
@@ -338,7 +343,7 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('RELATIONSHIP', style: AppTextStyles.labelText),
+        Text(TokenStorage.translate("RELATIONSHIP"), style: AppTextStyles.labelText),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -353,7 +358,7 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
               isExpanded: true,
               value: _selectedRelation,
               hint:
-              Text("Select Relationship", style: AppTextStyles.labelText),
+              Text(TokenStorage.translate("Select Relationship"), style: AppTextStyles.labelText),
               items: _relationItems.map((value) {
                 return DropdownMenuItem(
                   value: value,
@@ -432,7 +437,7 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
           ),
         ),
         child: Text(
-          _isEditing ? "Save Changes" : "Add Nominee",
+          _isEditing ?TokenStorage.translate("Save Changes") :TokenStorage.translate("Add Nominee"),
           style: GoogleFonts.poppins(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -455,7 +460,7 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          _isEditing ? 'Edit Nominee' : 'Add New Nominee',
+          _isEditing ? TokenStorage.translate("Edit Nominee") : TokenStorage.translate("Add New Nominee"),
           style: AppTextStyles.heading,
         ),
         centerTitle: true,

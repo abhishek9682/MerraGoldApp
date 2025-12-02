@@ -137,7 +137,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Tell us about yourself',
+                  TokenStorage.translate("Tell us about yourself"),
                 style: AppTextStyles.subHeading
               ),
               const SizedBox(height: 40),
@@ -154,7 +154,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               const SizedBox(height: 20),
               _buildDateField(),
               const SizedBox(height: 20),
-              _buildInputField("REFERRAL CODE (OPTIONAL)",
+              _buildInputField("${TokenStorage.translate("Referral")} CODE (${TokenStorage.translate("Optional")})",
                   _referralController, Icons.card_giftcard),
 
               const SizedBox(height: 40),
@@ -173,7 +173,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   child: provider.isLoading
                       ? CustomLoader()
-                      : Text("Complete Registration",
+                      : Text(TokenStorage.translate("Complete Registration"),
                       style: GoogleFonts.poppins(
                           fontSize: 18, fontWeight: FontWeight.w600)),
                 ),
@@ -220,31 +220,51 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   Widget _buildDateField() => InkWell(
     onTap: _selectDate,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.calendar_today,
-              color: Color(0xFFFFD700), size: 20),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              _dobController.text.isEmpty
-                  ? 'DD-MM-YYYY'
-                  : _dobController.text,
-              style: AppTextStyles.inputText.copyWith(
-                color: _dobController.text.isEmpty
-                    ? Colors.white30
-                    : Colors.white,
-              )
-              ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Label
+        Text(
+          TokenStorage.translate("Select Date of Birth"),
+          style: AppTextStyles.subInputText.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Colors.white70)
+          ),
+
+        const SizedBox(height: 8),
+
+        // Date Picker Field
+        InkWell(
+          onTap: _selectDate,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1A1A),
+              borderRadius: BorderRadius.circular(12),
             ),
-        ],
-      ),
-    ),
+            child: Row(
+              children: [
+                const Icon(Icons.calendar_today,
+                    color: Color(0xFFFFD700), size: 20),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    _dobController.text.isEmpty
+                        ? TokenStorage.translate("DD-MM-YYYY")
+                        : _dobController.text,
+                    style: AppTextStyles.inputText.copyWith(
+                      color: _dobController.text.isEmpty
+                          ? Colors.white30
+                          : Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    )
+
   );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/profile_details.dart';
@@ -63,7 +64,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Referral code copied!',
+          TokenStorage.translate("Referral code copied!"),
           style: AppTextStyles.snackbar16W600Black,
         ),
         backgroundColor: AppTextStyles.copyButton16W600Gold.color,
@@ -79,13 +80,13 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
     try {
       await Share.share(
         message,
-        subject: "Join Meera Gold – Earn Rewards!",
+        subject: TokenStorage.translate("Join Meera Gold – Earn Rewards!"),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Could not share referral code!',
+            TokenStorage.translate("Could not share referral code!"),
             style: AppTextStyles.snackbar16W600Black,
           ),
           backgroundColor: Colors.redAccent,
@@ -108,7 +109,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Refer & Earn',
+          TokenStorage.translate("Refer & Earn"),
           style: AppTextStyles.appBarTitle,
         ),
         centerTitle: true,
@@ -171,7 +172,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'For every friend you refer',
+            TokenStorage.translate("For every friend you refer"),
             textAlign: TextAlign.center,
             style: AppTextStyles.body16W500White,
           ),
@@ -194,7 +195,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
       ),
       child: Column(
         children: [
-          Text('Your Referral Code', style: AppTextStyles.body14W500White70),
+          Text(TokenStorage.translate("Your Referral Code"), style: AppTextStyles.body14W500White70),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -217,7 +218,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
             child: OutlinedButton.icon(
               onPressed: _copyReferralCode,
               icon: Icon(Icons.copy, size: 18, color: AppTextStyles.copyButton16W600Gold.color),
-              label: Text('Copy Code', style: AppTextStyles.copyButton16W600Gold),
+              label: Text(TokenStorage.translate("Copy Code"), style: AppTextStyles.copyButton16W600Gold),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: AppTextStyles.copyButton16W600Gold.color!, width: 2),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -236,7 +237,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
       child: ElevatedButton.icon(
         onPressed: _shareReferralCode,
         icon: const Icon(Icons.share, size: 20),
-        label: Text('Share & Invite Friends', style: AppTextStyles.shareButton18W600Black),
+        label: Text(TokenStorage.translate("Share & Invite Friends"), style: AppTextStyles.shareButton18W600Black),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTextStyles.copyButton16W600Gold.color,
           foregroundColor: AppTextStyles.buttonText.color,
@@ -258,13 +259,13 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('How it Works', style: AppTextStyles.sectionTitle18BoldWhite),
+          Text(TokenStorage.translate("How it Works"), style: AppTextStyles.sectionTitle18BoldWhite),
           const SizedBox(height: 20),
-          _buildStep(number: '1', title: 'Share your code', description: 'Share your unique referral code with friends'),
+          _buildStep(number: '1', title: TokenStorage.translate("Share your code"), description: TokenStorage.translate("Share your unique referral code with friends")),
           const SizedBox(height: 16),
-          _buildStep(number: '2', title: 'Friend signs up', description: 'Your friend registers using your code'),
+          _buildStep(number: '2', title: TokenStorage.translate( "Friend signs up"), description: TokenStorage.translate("Your friend registers using your code")),
           const SizedBox(height: 16),
-          _buildStep(number: '3', title: 'Both earn rewards', description: 'You both get ₹100 in your wallet'),
+          _buildStep(number: '3', title: TokenStorage.translate( "Both earn rewards"), description: TokenStorage.translate("You both get ₹100 in your wallet")),
         ],
       ),
     );
@@ -310,7 +311,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
       ),
       child: Column(
         children: [
-          Text('Your Referral Stats', style: AppTextStyles.sectionTitle18BoldWhite),
+          Text(TokenStorage.translate("Your Referral Stats"), style: AppTextStyles.sectionTitle18BoldWhite),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -356,10 +357,10 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:goldproject/models/get_profile_details.dart';
 import 'package:goldproject/screens/personal_details_screen.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../constants/constant.dart';
@@ -150,7 +151,7 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     child: Text(
-                      "Add Nominee Details",
+                      TokenStorage.translate("Add Nominee"),
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -286,13 +287,13 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
 
           const SizedBox(height: 20),
 
-          _buildDetailRow(Icons.phone_android, 'Mobile Number', mobile),
+          _buildDetailRow(Icons.phone_android, TokenStorage.translate( "Enter mobile number"), mobile),
           const SizedBox(height: 12),
 
-          _buildDetailRow(Icons.person, 'Age', age),
+          _buildDetailRow(Icons.person, TokenStorage.translate("NOMINEE AGE"), age),
           const SizedBox(height: 12),
 
-          _buildDetailRow(Icons.credit_card, 'Aadhar Number', aadhar),
+          _buildDetailRow(Icons.credit_card, TokenStorage.translate("AADHAAR NUMBER"), aadhar),
 
           const SizedBox(height: 20),
 
@@ -320,7 +321,7 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
                 ),
               ),
               child: Text(
-                'Edit Details',
+                TokenStorage.translate( "Edit Nominee"),
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

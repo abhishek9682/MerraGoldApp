@@ -88,7 +88,7 @@ class _WalletScreenState extends State<WalletScreen> {
           },
         ),
         title: Text(
-          'My Wallet',
+          TokenStorage.translate( "View My Wallet"),
           style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -136,10 +136,10 @@ class _WalletScreenState extends State<WalletScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, TokenStorage.translate('Home')),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, TokenStorage.translate('Profile')),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),
@@ -330,7 +330,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        'Sell Gold',
+                        TokenStorage.translate("Sell Gold"),
                         style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                       ),
                     ),
@@ -345,7 +345,7 @@ class _WalletScreenState extends State<WalletScreen> {
           child: SizedBox(
             height: 56,
             child: ElevatedButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BuyGoldScreen(amount: null,))),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>  BuyGoldScreen(amount: null,))),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFD700),
                 foregroundColor: const Color(0xFF0A0A0A),
@@ -361,7 +361,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   Flexible(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text('Buy More', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
+                      child: Text(TokenStorage.translate("Buy Gold"), style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],

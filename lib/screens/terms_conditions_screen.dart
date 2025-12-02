@@ -70,7 +70,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "Terms & Conditions",
+          TokenStorage.translate("Terms & Conditions"),
           style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -86,7 +86,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
           : provider.privacyPolicyResponse == null
           ? Center(
         child: Text(
-          "Failed to load content",
+          TokenStorage.translate("Terms & Conditions"),
           style: GoogleFonts.poppins(color: Colors.white),
         ),
       )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -57,7 +58,7 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("History",
+        title: Text(TokenStorage.translate("Plan invest history"),
             style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -145,7 +146,7 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Total Invested",
+                    Text(TokenStorage.translate("investment_plan"),
                         style: GoogleFonts.poppins(
                             color: Colors.white60, fontSize: 12)),
                     const SizedBox(height: 6),
@@ -201,7 +202,7 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        "Active",
+        TokenStorage.translate("investment_plan"),
         style: GoogleFonts.poppins(
           fontSize: 12,
           color: Colors.greenAccent,
@@ -224,7 +225,7 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Transaction History",
+          Text(TokenStorage.translate("Transaction History"),
               style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 18,
@@ -250,7 +251,7 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(40),
-        child: Text("No transactions yet.",
+        child: Text(TokenStorage.translate("No transactions found"),
             style:
             GoogleFonts.poppins(color: Colors.white54, fontSize: 14)),
       ),

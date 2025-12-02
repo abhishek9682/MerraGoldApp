@@ -87,7 +87,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     );
 
     if (!mounted) return;
-   print("otp vaifiaction is --->>>>> $success");
+   print("otp activation is --->>>>> $success");
     if (success) {
       if (otpProvider.verifyOtpResponse!.data!.profileCompleted!) {
         await TokenStorage.saveToken(
@@ -108,7 +108,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            otpProvider.apiStatus ?? "OTP Verification Failed",
+            otpProvider.apiStatus ?? TokenStorage.translate("Verify Your OTP to Disable"),
             style: AppTextStyles.bodyText,
           ),
           backgroundColor: Colors.red,
@@ -144,7 +144,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(TokenStorage.translate("Verify Your OTP"), style: AppTextStyles.heading),
+            Text(TokenStorage.translate(TokenStorage.translate("Verify Your OTP")), style: AppTextStyles.heading),
             const SizedBox(height: 20),
             Text(
               "Enter OTP sent to +91 ${widget.phoneNumber}",
