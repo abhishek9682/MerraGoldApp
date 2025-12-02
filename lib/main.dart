@@ -37,6 +37,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await TokenStorage.init();
+  await _loadBiometricSetting();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -71,8 +72,13 @@ void main() async{
      child: const MeeraGoldApp(),)
   );
 }
+Future<void> _loadBiometricSetting() async {
+  checkBiometric = await SecurityStorage.isBiometricEnabled();
+}
+bool checkBiometric=false;
 class MeeraGoldApp extends StatelessWidget {
   const MeeraGoldApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +108,7 @@ class MeeraGoldApp extends StatelessWidget {
         primarySwatch: Colors.amber,
       ),
 
-      home: SplashScreen(),
+      home: checkBiometric?AppLockScreen():SplashScreen(),
     );
   }
 }

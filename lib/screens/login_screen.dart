@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:goldproject/screens/terms_conditions_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../app_colors.dart';
@@ -278,15 +280,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               const TextSpan(text: ' and '),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: AppTextStyles.bodyText.copyWith(
-                                  color: const Color(0xFFFFD700),
-                                  fontWeight: FontWeight.w600,
-                                  decoration: TextDecoration.underline,
+
+                        TextSpan(
+                        text: 'Privacy Policy',
+                          style: AppTextStyles.bodyText.copyWith(
+                            color: const Color(0xFFFFD700),
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // Navigate to the Privacy Policy Screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TermsConditionsScreen(),
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+                        ),
+                        ],
                           ),
                         ),
                       ),

@@ -617,10 +617,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       ),
       body: _isLoading
           ? const Center(
-        child: CircularProgressIndicator(
-          valueColor:
-          AlwaysStoppedAnimation<Color>(Color(0xFFFFD700)),
-        ),
+        child: CustomLoader(color: Colors.yellow,size: 50,),
       )
           : SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

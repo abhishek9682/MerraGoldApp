@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/screens/dashboard_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/varify_otp.dart';
@@ -144,11 +145,56 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(TokenStorage.translate(TokenStorage.translate("Verify Your OTP")), style: AppTextStyles.heading),
-            const SizedBox(height: 20),
+
+            // Lock Icon
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFD700),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.lock_outline,
+                  size: 50,
+                  color: Color(0xFF0A0A0A),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Text(TokenStorage.translate(TokenStorage.translate("Verify Your OTP")),
+                style: AppTextStyles.heading.copyWith(color: Colors.white)),
+            // const SizedBox(height: 10),
+            // Subtitle
             Text(
-              "Enter OTP sent to +91 ${widget.phoneNumber}",
-              style: AppTextStyles.subHeading,
+              'Enter code sent to mobile',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: Colors.white60,
+              ),
+            ),
+            const SizedBox(height: 30),
+            RichText(
+              text: TextSpan(
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.white60,
+                ),
+                children: [
+                  const TextSpan(text: 'Code sent to\n'),
+                  TextSpan(
+                    text: '+91 ${widget.phoneNumber}',
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      color: const Color(0xFFFFD700),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),

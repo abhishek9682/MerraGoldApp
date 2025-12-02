@@ -27,34 +27,34 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
     });
   }
 
-  void _onNavItemTapped(int index) {
-    if (index == _selectedNavIndex && index != 3) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
-              (_) => false,
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const WalletScreen()),
-        );
-        break;
-      case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HistoryScreen()),
-        );
-        break;
-      case 3:
-        if (Navigator.canPop(context)) Navigator.pop(context);
-        break;
-    }
-  }
+  // void _onNavItemTapped(int index) {
+  //   if (index == _selectedNavIndex && index != 3) return;
+  //
+  //   switch (index) {
+  //     case 0:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const DashboardScreen()),
+  //             (_) => false,
+  //       );
+  //       break;
+  //     case 1:
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const WalletScreen()),
+  //       );
+  //       break;
+  //     case 2:
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const HistoryScreen()),
+  //       );
+  //       break;
+  //     case 3:
+  //       if (Navigator.canPop(context)) Navigator.pop(context);
+  //       break;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
         ),
       )
           : _buildContent(provider),
-      bottomNavigationBar: _buildBottomNav(),
+      // bottomNavigationBar: _buildBottomNav(),
     );
   }
 
@@ -160,59 +160,59 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
     );
   }
 
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.1)),
-        ),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, "Wallet"),
-              _buildNavItem(2, Icons.history, "History"),
-              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildBottomNav() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xFF1A1A1A),
+  //       border: Border(
+  //         top: BorderSide(color: Colors.white.withOpacity(0.1)),
+  //       ),
+  //     ),
+  //     child: SafeArea(
+  //       child: SizedBox(
+  //         height: 60,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //           children: [
+  //             _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+  //             _buildNavItem(1, Icons.account_balance_wallet, "Wallet"),
+  //             _buildNavItem(2, Icons.history, "History"),
+  //             _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _selectedNavIndex == index;
-
-    return InkWell(
-      onTap: () => _onNavItemTapped(index),
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildNavItem(int index, IconData icon, String label) {
+  //   final isSelected = _selectedNavIndex == index;
+  //
+  //   return InkWell(
+  //     onTap: () => _onNavItemTapped(index),
+  //     borderRadius: BorderRadius.circular(12),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(8),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             icon,
+  //             size: 24,
+  //             color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
+  //           ),
+  //           const SizedBox(height: 4),
+  //           Text(
+  //             label,
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 11,
+  //               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+  //               color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
