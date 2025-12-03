@@ -26,3 +26,4 @@ const String investmentPlanTransactions="/investment-plans-mobile/my-transaction
 const String policy="/content/privacy-policy";
 const String notifiacation="/push-notification-show";
 const String vender="/merchants";
+const String termsCondition="/content/terms-conditions";

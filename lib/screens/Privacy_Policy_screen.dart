@@ -8,14 +8,14 @@ import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
 import 'history_screen.dart';
 
-class TermsConditionsScreen extends StatefulWidget {
-  const TermsConditionsScreen({super.key});
+class PrivacyPolicyScreen extends StatefulWidget {
+  const PrivacyPolicyScreen({super.key});
 
   @override
-  State<TermsConditionsScreen> createState() => _TermsConditionsScreenState();
+  State<PrivacyPolicyScreen> createState() => _TermsConditionsScreenState();
 }
 
-class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
+class _TermsConditionsScreenState extends State<PrivacyPolicyScreen> {
   int _selectedNavIndex = 3;
 
   @override
@@ -27,34 +27,6 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
     });
   }
 
-  // void _onNavItemTapped(int index) {
-  //   if (index == _selectedNavIndex && index != 3) return;
-  //
-  //   switch (index) {
-  //     case 0:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const DashboardScreen()),
-  //             (_) => false,
-  //       );
-  //       break;
-  //     case 1:
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const WalletScreen()),
-  //       );
-  //       break;
-  //     case 2:
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const HistoryScreen()),
-  //       );
-  //       break;
-  //     case 3:
-  //       if (Navigator.canPop(context)) Navigator.pop(context);
-  //       break;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +42,7 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          TokenStorage.translate("Terms & Conditions"),
+          TokenStorage.translate("Privacy Policy"),
           style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -107,11 +79,13 @@ class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
           // Last Updated
           Row(
             children: [
-              Text(
-                'Last Updated: ',
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  color: Colors.white60,
+              Expanded(
+                child: Text(
+                  'Last Updated: ${data?.lastUpdated}',
+                  style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    color: Colors.white60,
+                  ),
                 ),
               ),
               Text(

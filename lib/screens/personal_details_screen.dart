@@ -799,17 +799,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 label:TokenStorage.translate("City/Town"),
                 controller: _cityController,
                 icon: Icons.location_city,
-                hint: 'City',
+                hint: TokenStorage.translate("City/Town"),
                 errorText: _fieldErrors['city'],
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: _buildTextField(
-                label: 'STATE',
+                label: TokenStorage.translate("State"),
                 controller: _stateController,
                 icon: Icons.map_outlined,
-                hint: 'State',
+                hint: TokenStorage.translate("State"),
                 errorText: _fieldErrors['state'],
               ),
             ),
@@ -832,7 +832,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: _buildTextField(
-                label: 'COUNTRY',
+                label: TokenStorage.translate("Country"),
                 controller: TextEditingController(text: 'India'),
                 icon: Icons.public,
                 readOnly: true,
@@ -845,7 +845,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           children: [
             Expanded(
               child: _buildTextField(
-                label: 'PAN CARD NUMBER',
+                label: TokenStorage.translate("Pan number"),
                 controller: _panController,
                 icon: Icons.credit_card,
                 hint: 'ABCDE1234F',
@@ -880,7 +880,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return kycDocs.isEmpty?SizedBox():Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Uploaded Documents", style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("Uploaded Documents"), style: AppTextStyles.subHeading1),
         const SizedBox(height: 12),
         if (kycDocs.isEmpty)
           Text("No documents uploaded yet", style: AppTextStyles.subHeading),
@@ -927,13 +927,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
     return kycDocs.isEmpty
         ? SizedBox(
-      child: Text("No KYC documents required",
+      child: Text(TokenStorage.translate("No KYC documents required"),
           style: AppTextStyles.subHeading),
     )
         : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("KYC Documents", style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("KYC Documents"), style: AppTextStyles.subHeading1),
         const SizedBox(height: 12),
         ...kycDocs.map((group) {
           String name = group.kycName ?? "";
@@ -1024,9 +1024,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   const SizedBox(height: 3),
                   Text(
                     localFile != null
-                        ? "Selected (Tap to change)"
+                        ? TokenStorage.translate("Selected (Taptochange)")
                         : isUploaded
-                        ? "Uploaded (Tap to change)"
+                        ? TokenStorage.translate("Uploaded (Taptochange)")
                         : subtitle,
                     style: AppTextStyles.subHeading
                         .copyWith(color: Colors.white60),
@@ -1218,7 +1218,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate('GENDER'), style: AppTextStyles.subHeading),
+        Text(TokenStorage.translate("Select Gender"), style: AppTextStyles.subHeading),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),

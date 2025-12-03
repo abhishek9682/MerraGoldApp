@@ -6,6 +6,7 @@ import '../controllers/profile_details.dart';
 import '../controllers/update_profile.dart';
 import '../models/Language.dart';
 import '../utils/token_storage.dart';
+import 'Terms and condition.dart';
 import 'language_selection_screen.dart';
 import 'login_screen.dart';
 import 'notifications_screen.dart';
@@ -17,7 +18,7 @@ import 'nominee_list_screen.dart';
 import 'security_screen.dart';
 import 'help_center_screen.dart';
 import 'refer_earn_screen.dart';
-import 'terms_conditions_screen.dart';
+import 'Privacy_Policy_screen.dart';
 import '../compenent/custom_style.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -537,12 +538,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildDivider(),
                 _buildListItem(
                   icon: Icons.description_outlined,
-                  title: TokenStorage.translate("Terms & Conditions"),
+                  title: TokenStorage.translate("Privacy Policy"),
                   subtitle: TokenStorage.translate("Readourterms"),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsConditionsScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()));
                   },
                 ),
+                // _buildListItem(
+                //   icon: Icons.description_outlined,
+                //   title: TokenStorage.translate("Terms & Conditions"),
+                //   subtitle: TokenStorage.translate("Readourterms"),
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(builder: (context) => const TermsConditionsScreen()));
+                //   },
+                // ),
               ],
             ),
           ),

@@ -25,7 +25,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
-  int _selectedAmount = 1;
+  int _selectedAmount = -1;
   String amount="";
 
   @override

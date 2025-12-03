@@ -1,16 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:goldproject/screens/terms_conditions_screen.dart';
+import 'package:goldproject/screens/Privacy_Policy_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../app_colors.dart';
 import '../compenent/custom_style.dart';
 import '../compenent/loader.dart';
 import '../constants/constant.dart';
 import '../controllers/otp_response.dart';
 import '../utils/token_storage.dart';
+import 'Terms and condition.dart';
 import 'otp_verification_screen.dart';
 import 'create_account_screen.dart';
+
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -148,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Subtitle
                 Text(
-                  'Login to your account',
+                 TokenStorage.translate("Login to your account"),
                   style: AppTextStyles.subHeading
                 ),
                 const SizedBox(height: 50),
@@ -272,17 +274,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               const TextSpan(text: 'I accept the '),
                               TextSpan(
-                                text: 'Terms & Conditions',
+                                text: TokenStorage.translate("Terms & Conditions"),
                                 style: AppTextStyles.bodyText.copyWith(
                                   color: const Color(0xFFFFD700),
                                   fontWeight: FontWeight.w600,
                                   decoration: TextDecoration.underline,
                                 ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Navigate to the Privacy Policy Screen
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TermsConditionsScreen(),
+                                      ),
+                                    );
+                                  },
                               ),
                               const TextSpan(text: ' and '),
 
                         TextSpan(
-                        text: 'Privacy Policy',
+                        text:TokenStorage.translate("Privacy Policy"),
                           style: AppTextStyles.bodyText.copyWith(
                             color: const Color(0xFFFFD700),
                             fontWeight: FontWeight.w600,
@@ -294,7 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TermsConditionsScreen(),
+                                  builder: (context) => PrivacyPolicyScreen(),
                                 ),
                               );
                             },

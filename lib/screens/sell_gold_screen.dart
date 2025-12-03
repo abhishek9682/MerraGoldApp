@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/profile_details.dart';
+import '../controllers/sell_gold.dart';
 import '../utils/token_storage.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
@@ -23,8 +24,9 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
   int? _selectedBankId;
   int _selectedNavIndex = 1; // Wallet tab selected
   bool _isByAmount = true;
-  int _selectedQuickAmount = 1;
+  int _selectedQuickAmount = -1;
   bool isLoading=true;
+  bool goldLoading=false;
 
   @override
   void initState() {
@@ -92,8 +94,6 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
    });
   }
 
-
-
   Widget _buildBankDropdown() {
     final profileProvider = Provider.of<ProfileDetailsProvider>(context);
     final banks = profileProvider.profileData?.data?.profile?.bankAccounts ?? [];
@@ -111,7 +111,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
       ),
       child: DropdownButton<int>(
         value: _selectedBankId,
-        hint: Text('Select bank account', style: TextStyle(color: Colors.white70)),
+        hint: Text(TokenStorage.translate("Select Bank"), style: TextStyle(color: Colors.white70)),
         isExpanded: true,
         dropdownColor: const Color(0xFF1A1A1A),
         underline: const SizedBox(),
@@ -134,9 +134,9 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
   }
 
   final TextEditingController _amountController =
-  TextEditingController(text: '5000');
+  TextEditingController(text: '');
   final TextEditingController _goldController =
-  TextEditingController(text: '0.730');
+  TextEditingController(text: '');
 
 
   @override
@@ -221,28 +221,53 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
 
 
   void _continueToPayment() async {
+    final goldProvider = Provider.of<GoldSellProvider>(context, listen: false);
     final profileProvider = Provider.of<ProfileDetailsProvider>(context, listen: false);
     final double gold = double.tryParse(_goldController.text.trim()) ?? 0;
     final double amount = double.tryParse(_amountController.text.trim()) ?? 0;
     if (gold <= 0 || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Enter a valid amount or gold weight")),
+        SnackBar(content: Text(TokenStorage.translate("Enter a valid amount or gold weight"))),
       );
       return;
     }
+
+    goldLoading=goldProvider.isLoading;
+
     if(profileProvider.profileData!.data!.profile!.kycStatus!="approved")
     {
        Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalDetailsScreen()));
        return;
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>
-        SellGoldPaymentScreen(selectId: _selectedBankId!,goldAmount: gold, cashAmount: amount,)));
+    Map<String, dynamic> body = {
+      "gold_grams": gold,
+      "payment_method": "bank_transfer",
+      "bank_account_id": profileProvider.primaryBank?.id,
+    };
+
+    final success = await goldProvider.sellGold(body);
+    debugPrint("Sell Request Body => $body--${success}");
+    goldLoading=goldProvider.isLoading;
+
+    if(success==false){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${goldProvider.res}"),
+            backgroundColor: Colors.red,
+          ));
+    }
+    else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>
+          SellGoldPaymentScreen(selectId: _selectedBankId!,
+            goldAmount: gold,
+            cashAmount: amount,)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final provider=Provider.of<ProfileDetailsProvider>(context, listen: false);
-
+    final goldPro = Provider.of<GoldSellProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
       appBar: AppBar(
@@ -252,7 +277,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Sell Gold', style: AppTextStyles.pageTitle),
+        title: Text(TokenStorage.translate("Sell Gold"), style: AppTextStyles.pageTitle),
         centerTitle: true,
       ),
       body: isLoading?Center(child: CustomLoader(),):SingleChildScrollView(
@@ -405,7 +430,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                 }),
                 _buildQuickAmountChip(
                   amount: TokenStorage.translate("custom"),
-                    gold: 'Enter value',
+                  gold: _amountController.text.isEmpty ? "00" : _amountController.text,
                   isSelected: false,
                   onTap: () {
                     setState(() {
@@ -458,7 +483,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
-                child: Text('Continue to Payment',
+                child: goldLoading?Center(child: CustomLoader()):Text('Continue to Payment',
                     style: AppTextStyles.body18W600Black),
               ),
             ),
@@ -541,7 +566,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
               _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

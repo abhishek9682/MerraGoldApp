@@ -179,7 +179,7 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
                 size: 60, color: Colors.white24),
             const SizedBox(height: 16),
             Text(
-              'No Nominees Found',
+              TokenStorage.translate( "No Nominees Found"),
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -188,7 +188,7 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Add a new nominee to secure your account.',
+              TokenStorage.translate("Add a new nominee to secure your account."),
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: 14,
@@ -231,14 +231,14 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: const Color(0xFFFFD700).withOpacity(0.2),
-                  image: (photo != null && photo.toString().isNotEmpty)
+                  image: (nominee.profilePicture != null && nominee.profilePicture!.isNotEmpty)
                       ? DecorationImage(
-                    image: NetworkImage(photo),
+                    image: NetworkImage("$imageUrl${nominee.profilePicture}"),
                     fit: BoxFit.cover,
                   )
                       : null,
                 ),
-                child: (photo == null || photo.toString().isEmpty)
+                child: (nominee.profilePicture == null || nominee.profilePicture!.isEmpty)
                     ? Center(
                   child: Text(
                     _initials(name),
@@ -321,7 +321,7 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
                 ),
               ),
               child: Text(
-                TokenStorage.translate( "Edit Nominee"),
+                TokenStorage.translate("Edit Nominee"),
                 style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -388,10 +388,10 @@ class _NomineeListScreenState extends State<NomineeListScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home, 'Home'),
-              _buildNavItem(1, Icons.account_balance_wallet, 'Wallet'),
-              _buildNavItem(2, Icons.history, 'History'),
-              _buildNavItem(3, Icons.person, 'Profile'),
+              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
+              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
+              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),
         ),

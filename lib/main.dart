@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:goldproject/screens/app_lock_screen.dart';
-import 'package:goldproject/screens/terms_conditions_screen.dart';
+import 'package:goldproject/screens/Privacy_Policy_screen.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import 'compenent/snackbar.dart';
 import 'controllers/Delete_Bank.dart';
 import 'controllers/InvestmentPlansProvider.dart';
+import 'controllers/Term_condition.dart';
 import 'controllers/add_bank_account.dart';
 import 'controllers/add_new_nominee.dart';
 import 'controllers/buy_gold.dart';
@@ -68,6 +69,7 @@ void main() async{
       ChangeNotifierProvider(create: (_) =>NotificationProvider()),
       ChangeNotifierProvider(create: (_) => MerchantProvider()),
       ChangeNotifierProvider(create: (_) => LanguageDataProvider()),
+      ChangeNotifierProvider(create: (_) => TermsConditionsProvider()),
    ],
      child: const MeeraGoldApp(),)
   );

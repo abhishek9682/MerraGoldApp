@@ -167,7 +167,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            '₹100',
+            TokenStorage.translate("₹100"),
             style: AppTextStyles.reward48BoldWhite,
           ),
           const SizedBox(height: 8),
@@ -315,9 +315,9 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildStatCard(icon: Icons.people, value: '${provider.profileData?.data?.profile?.referralStats?.totalReferrals}', label: 'Total Referrals')),
+              Expanded(child: _buildStatCard(icon: Icons.people, value: '${provider.profileData?.data?.profile?.referralStats?.totalReferrals}', label: TokenStorage.translate("Total Referrals"))),
               const SizedBox(width: 12),
-              Expanded(child: _buildStatCard(icon: Icons.account_balance_wallet, value: '${provider.profileData?.data?.profile?.referralStats?.totalBonusEarned}', label: 'Total Earned')),
+              Expanded(child: _buildStatCard(icon: Icons.account_balance_wallet, value: '${provider.profileData?.data?.profile?.referralStats?.totalBonusEarned}', label: TokenStorage.translate("Total Earned"))),
             ],
           ),
         ],

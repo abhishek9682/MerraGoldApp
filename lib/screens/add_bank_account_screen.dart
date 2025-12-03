@@ -61,17 +61,17 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
         _confirmAccountController.text.isEmpty ||
         _ifscController.text.isEmpty ||
         _selectedAccountType == null) {
-      _showSnackbar("Please fill all required fields", false);
+      _showSnackbar(TokenStorage.translate("Please fill all required fields"), false);
       return false;
     }
 
     if (_accountNumberController.text != _confirmAccountController.text) {
-      _showSnackbar("Account numbers do not match", false);
+      _showSnackbar(TokenStorage.translate("Account numbers do not match"), false);
       return false;
     }
 
     if (_ifscController.text.length != 11) {
-      _showSnackbar("IFSC code must be 11 characters", false);
+      _showSnackbar(TokenStorage.translate("IFSC code must be 11 characters"), false);
       return false;
     }
 
@@ -125,7 +125,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
     setState(() => isLoading = false);
 
     _showSnackbar(
-      success ? "Bank account saved successfully!" : provider.message,
+      success ? TokenStorage.translate("Bank account saved successfully!") : provider.message,
       success,
     );
 
@@ -168,21 +168,21 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
         children: [
           Text(TokenStorage.translate('Bank Details'), style: AppTextStyles.sectionTitle),
           const SizedBox(height: 20),
-          _buildTextField(TokenStorage.translate("BANK NAME"), _bankNameController, Icons.account_balance, "Enter bank name"),
+          _buildTextField(TokenStorage.translate("BANK NAME"), _bankNameController, Icons.account_balance, TokenStorage.translate("Enter bank name")),
           const SizedBox(height: 16),
-          _buildTextField(TokenStorage.translate("ACCOUNT HOLDER NAME"), _accountHolderController, Icons.person_outline, "As per bank records"),
+          _buildTextField(TokenStorage.translate("ACCOUNT HOLDER NAME"), _accountHolderController, Icons.person_outline, TokenStorage.translate("As per bank records")),
           const SizedBox(height: 16),
-          _buildTextField(TokenStorage.translate("ACCOUNT NUMBER"), _accountNumberController, Icons.credit_card, "Enter account number",
+          _buildTextField(TokenStorage.translate("ACCOUNT NUMBER"), _accountNumberController, Icons.credit_card, TokenStorage.translate("Enter account number"),
               keyboardType: TextInputType.number, maxLength: 12),
           const SizedBox(height: 16),
-          _buildTextField(TokenStorage.translate("CONFIRM ACCOUNT NUMBER"), _confirmAccountController, Icons.credit_card, "Re-enter number",
+          _buildTextField(TokenStorage.translate("CONFIRM ACCOUNT NUMBER"), _confirmAccountController, Icons.credit_card, TokenStorage.translate("Re-enter number"),
               keyboardType: TextInputType.number, maxLength: 12),
           const SizedBox(height: 16),
-          _buildTextField(TokenStorage.translate("IFSC CODE"), _ifscController, Icons.numbers, "Enter IFSC", maxLength: 11),
+          _buildTextField(TokenStorage.translate("IFSC CODE"), _ifscController, Icons.numbers, TokenStorage.translate("Enter IFSC"), maxLength: 11),
           const SizedBox(height: 16),
           _buildAccountTypeDropdown(),
           const SizedBox(height: 16),
-          _buildTextField(TokenStorage.translate("BRANCH NAME"), _branchController, Icons.business, "Optional"),
+          _buildTextField(TokenStorage.translate("BRANCH NAME"), _branchController, Icons.business, TokenStorage.translate("Optional")),
           const SizedBox(height: 32),
           _buildSubmitButton(),
           const SizedBox(height: 40),
@@ -243,9 +243,9 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
               dropdownColor: const Color(0xFF1A1A1A),
               isExpanded: true,
               hint: Text(TokenStorage.translate("Select account type"), style: AppTextStyles.body14White70),
-              items: const [
-                DropdownMenuItem(value: "savings", child: Text("Savings Account", style: TextStyle(color: Colors.white))),
-                DropdownMenuItem(value: "current", child: Text("Current Account", style: TextStyle(color: Colors.white))),
+              items: [
+                DropdownMenuItem(value: "savings", child: Text(TokenStorage.translate("Savings Account"), style: TextStyle(color: Colors.white))),
+                DropdownMenuItem(value: "current", child: Text(TokenStorage.translate("Current Account"), style: TextStyle(color: Colors.white))),
               ],
               onChanged: (v) => setState(() => _selectedAccountType = v),
             ),
@@ -268,7 +268,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
         onPressed: _addBankAccount,
-        child: Text(widget.bank == null ? "Add Bank Account" : "Update Bank Account",
+        child: Text(widget.bank == null ?TokenStorage.translate("Add Bank Account") : TokenStorage.translate("Update Bank Account Button"),
             style: AppTextStyles.buttonText),
       ),
     );
@@ -288,7 +288,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
               _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

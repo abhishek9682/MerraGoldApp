@@ -113,9 +113,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Biometric Login', style: AppTextStyles.body16W600White),
+                Text(TokenStorage.translate("Biometric Login"), style: AppTextStyles.body16W600White),
                 const SizedBox(height: 4),
-                Text('Use fingerprint or Face ID', style: AppTextStyles.body14White70),
+                Text(TokenStorage.translate("Use fingerprint or Face ID"), style: AppTextStyles.body14White70),
               ],
             ),
           ),
@@ -144,8 +144,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
           SnackBar(
             content: Text(
               newValue
-                  ? 'Biometric login enabled'
-                  : 'Biometric login disabled',
+                  ? TokenStorage.translate("Biometric login enabled")
+                  : TokenStorage.translate("Biometric login disabled"),
               style: AppTextStyles.snackbar16W600Black,
             ),
             backgroundColor: newValue ? Colors.green : Colors.orange,

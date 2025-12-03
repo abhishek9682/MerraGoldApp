@@ -25,7 +25,8 @@ class BuyGoldScreen extends StatefulWidget {
 
 class _BuyGoldScreenState extends State<BuyGoldScreen> {
   int _selectedNavIndex = 1;
-  int _selectedQuickAmount = 2;
+  int _selectedQuickAmount = -1;
+  double _calculatedGold = 0.0;
 
   late final TextEditingController _amountController =
   TextEditingController(text: "${widget.amount ??0.00}");
@@ -104,6 +105,27 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       );
     }
   }
+  Future<void> _updateGoldCalculation() async {
+    final amount = double.tryParse(_amountController.text) ?? 0;
+
+    final provider = Provider.of<GoldDetails>(context, listen: false);
+
+    Map<String, String> body = {
+      "type": "inr_to_grams",
+      "amount": "$amount"
+    };
+
+    await provider.goldDetails(body);
+
+    final response = provider.goldCalculationResponse;
+
+    if (response != null && response.data?.grams != null) {
+      setState(() {
+        _calculatedGold = double.tryParse(response.data!.grams!) ?? 0.0;
+      });
+    }
+  }
+
 
   double? _calculateGold() {
     final amount = double.tryParse(_amountController.text) ?? 0;
@@ -133,6 +155,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       _selectedQuickAmount = index;
       _amountController.text = _quickAmounts[index]['amount'].toString();
     });
+    _updateGoldCalculation();
   }
 
   void _proceedToPayment() async {
@@ -153,17 +176,7 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalDetailsScreen()));
       return;
     }
-  //   final provider = Provider.of<BuyGold>(context, listen: false);
-  //
-  //   Map<String, dynamic> body = {
-  //     "amount": _amountController.text,
-  //     "gateway_id": 10,
-  //     "supported_currency": "INR"
-  //   };
-  //
-  //   bool success = await provider.buyGold(body);
-  // print("buy response__---$success---${provider.loading}");
-  //   if (success) {
+
       if (mounted) {
         Navigator.push(
           context,
@@ -185,7 +198,6 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -367,13 +379,13 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
                     border: InputBorder.none,
                     hintText: '0',
                   ),
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) => _updateGoldCalculation(),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text('= ${_calculateGold()?.toString()} grams',
+          Text('= ${_calculatedGold.toString()} grams',
               style: GoogleFonts.poppins(
                   color: const Color(0xFFFFD700),
                   fontWeight: FontWeight.w600)),
