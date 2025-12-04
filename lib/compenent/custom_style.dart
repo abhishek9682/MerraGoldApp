@@ -4,23 +4,35 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTextStyles {
   // 🔹 Main headings
   static final heading = GoogleFonts.poppins(
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: FontWeight.bold,
-    color: const Color(0xFFFFD700),
-    letterSpacing: 1,
+    color: Colors.white,
+  );
+
+  static TextStyle loginHeading= GoogleFonts.poppins(
+  fontSize: 32,
+  fontWeight: FontWeight.bold,
+  color: Colors.white,
+  );
+
+  static TextStyle loginSubHeading=GoogleFonts.poppins(
+    fontSize: 16,
+    color: Colors.white60,
+    fontWeight: FontWeight.w400,
   );
 
   static final subHeading = GoogleFonts.poppins(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    color: Colors.white70,
-    letterSpacing: 3,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    letterSpacing: 0
   );
+
   static final subHeading1 = GoogleFonts.poppins(
     fontSize: 20,
     fontWeight: FontWeight.w400,
     color: const Color(0xFFFFD700),
-    letterSpacing: 3,
+
   );
 
 
@@ -61,6 +73,11 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
+  static final content =  GoogleFonts.poppins(
+  fontSize: 14,
+  color: Colors.white70,
+  height: 1.6,
+  );
 
   static final sectionTitle18W600White = GoogleFonts.poppins(
     fontSize: 18,
@@ -69,11 +86,9 @@ class AppTextStyles {
   );
 
   // 🔹 Body / Paragraph
-  static final bodyText = GoogleFonts.poppins(
-    fontSize: 14,
-    fontWeight: FontWeight.normal,
-    color: Colors.white70,
-    height: 1.5,
+  static final bodyText =  GoogleFonts.poppins(
+    fontSize: 13,
+    color: Colors.white60,
   );
 
   static final faqAnswer = GoogleFonts.poppins(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goldproject/compenent/loader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/bottum_bar.dart';
 import '../controllers/InvestmentPlansProvider.dart';
 import '../controllers/profile_details.dart';
 import '../models/investment_plans.dart';
@@ -15,6 +16,7 @@ import 'all_plans_screen.dart';
 import 'plan_detail_screen.dart';
 import 'notifications_screen.dart';
 import 'buy_gold_screen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -154,7 +156,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Column(
                     children: [
                       _buildHeader(),
-                      _buildGoldRateCard(),
+                      buildBannerSlider(),
                       const SizedBox(height: 20),
                       _buildPortfolioCard(),
                       const SizedBox(height: 24),
@@ -172,7 +174,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedIndex,
+          onItemSelected: _onNavItemTapped,
+        )
     );
   }
 
@@ -190,7 +195,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   _getGreeting(),
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.white60,
                   ),
                 ),
@@ -198,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Text(
                   '${provider.profileData?.data?.profile?.firstname}',
                   style: GoogleFonts.poppins(
-                    fontSize: 24,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -206,6 +211,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
+          goldRateCylinder(),
           Row(
             children: [
               const SizedBox(width: 12),
@@ -239,74 +245,111 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildGoldRateCard() {
-    final provider= Provider.of<ProfileDetailsProvider>(context);
+
+
+  Widget buildBannerSlider() {
+    final List<String> banners = [
+      "assets/images/banner1.jpeg",
+      "assets/images/banner2.jpeg",
+      "assets/images/banner3.jpeg",
+    ];
+
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 150,
+        autoPlay: true,
+        enlargeCenterPage: true,
+        viewportFraction: 0.90,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        enlargeFactor: 0.15,
+      ),
+      items: banners.map((imagePath) {
+        return Builder(
+          builder: (BuildContext context) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(26),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+
+
+
+  Widget goldRateCylinder() {
+    final provider = Provider.of<ProfileDetailsProvider>(context);
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF2A2A1A), Color(0xFF1A1A0A)],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.2)),
+        borderRadius: BorderRadius.circular(50), // CYLINDRICAL
+        border: Border.all(
+          color: const Color(0xFFFFD700).withOpacity(0.3),
+          width: 1,
+        ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        TokenStorage.translate("today_gold_rate"),
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(
-                      "${provider.profileData?.data?.profile?.currentGoldPricePerGram}",
-                      style: GoogleFonts.poppins(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFFFFD700),
-                      ),
-                    ),
-                    Text(
-                      TokenStorage.translate("/per_gram"),
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        color: Colors.white60,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          // Green dot
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
             ),
+          ),
+          const SizedBox(width: 8),
+
+          // Text Column
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                TokenStorage.translate("today_gold_rate"),
+                style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  color: Colors.white70,
+                ),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "${provider.profileData?.data?.profile?.currentGoldPricePerGram ?? "--"}",
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFFFD700),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    TokenStorage.translate("per_gram"),
+                    style: GoogleFonts.poppins(
+                      fontSize: 11,
+                      color: Colors.white54,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+
 
   Widget _buildPortfolioCard() {
     final provider=Provider.of<ProfileDetailsProvider>(context);
@@ -341,11 +384,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 5),
           Text(
-            "${provider.profileData?.data?.profile?.goldBalanceValue}",
+            "₹${provider.profileData?.data?.profile?.goldBalanceValue}",
             style: GoogleFonts.poppins(
-              fontSize: 40,
+              fontSize: 34,
               fontWeight: FontWeight.bold,
               color: const Color(0xFF0A0A0A),
             ),
@@ -360,13 +403,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                    TokenStorage.translate("gold_owned"),
                     style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: const Color(0xFF0A0A0A).withOpacity(0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "${provider.profileData?.data?.profile?.goldBalance}g",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF0A0A0A),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total Returns',
+                    style: GoogleFonts.poppins(
                       fontSize: 13,
                       color: const Color(0xFF0A0A0A).withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${provider.profileData?.data?.profile?.goldBalance}",
+                    '+₹5,280',
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -375,6 +439,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
+
+
             ],
           ),
         ],
@@ -684,18 +750,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (!plansProvider.isLoading && plansProvider.plans.isNotEmpty)
           LayoutBuilder(
             builder: (context, constraints) {
-              return SizedBox(
-                height: 250, // OR dynamically computed as per card content
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: plansProvider.plans.length >= 3
-                      ? 3
-                      : plansProvider.plans.length,
-                  itemBuilder: (_, index) => Row(
-                    children: [
-                      _buildPlanCard(plansProvider.plans[index]),
-                      const SizedBox(width: 16),
-                    ],
+              return Padding(
+                padding: const EdgeInsets.all(15),
+                child: SizedBox(
+                  height: 210, // OR dynamically computed as per card content
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: plansProvider.plans.length >= 3
+                        ? 3
+                        : plansProvider.plans.length,
+                    itemBuilder: (_, index) => Row(
+                      children: [
+                        _buildPlanCard(plansProvider.plans[index]),
+                        const SizedBox(width: 16),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -708,9 +777,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildPlanCard(Plan plan) {
     final isPurchased = _purchasedPlans.contains(plan.name);
-    // final badge = plan.isSubscribed ? "Active" : (plan.isSubscribed ? "Featured" : null);
+    // final active = plan.isSubscribed ? "Active"  : null;
     String? badge = plan.userSubscriptionStatus;
-    final badgeColor = isPurchased ? Colors.green :  Color(0xFFFFD700);
+    final badgeColor = plan.isSubscribed ? Colors.green :  Color(0xFFFFD700);
     return GestureDetector(
       onTap: () {
         print("name __---- -- ${plan.isSubscribed}");
@@ -725,7 +794,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       child: Container(
         width: 180,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(right: 16,left: 16,top: 16,bottom: 8),
         decoration: BoxDecoration(
           color: const Color(0xFF1A1A1A),
           borderRadius: BorderRadius.circular(16),
@@ -738,6 +807,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // IMAGE
+
+            Row(children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
@@ -748,7 +819,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(width: 50),
             if (badge != null)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
@@ -765,6 +836,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
               ),
+            ]
+            ),
 
             const SizedBox(height: 10),
 
@@ -790,12 +863,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
 
-            const SizedBox(height: 10),
-            ...plan.features.map(
+            const SizedBox(height: 7),
+            // SHOW ONLY FIRST 3 FEATURES
+            ...plan.features.take(1).map(
                   (feature) => Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  "✓$feature",
+                  "✓ $feature",
                   style: GoogleFonts.poppins(
                     fontSize: 11,
                     color: Colors.white70,
@@ -805,55 +879,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1))),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
-              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _selectedIndex == index;
-    return InkWell(
-      onTap: () => _onNavItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-            size: 24,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -166,15 +166,12 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
             const SizedBox(height: 30),
 
             Text(TokenStorage.translate(TokenStorage.translate("Verify Your OTP")),
-                style: AppTextStyles.heading.copyWith(color: Colors.white)),
+                style: AppTextStyles.loginHeading),
             // const SizedBox(height: 10),
             // Subtitle
             Text(
               'Enter code sent to mobile',
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                color: Colors.white60,
-              ),
+              style: AppTextStyles.loginSubHeading,
             ),
             const SizedBox(height: 30),
             RichText(

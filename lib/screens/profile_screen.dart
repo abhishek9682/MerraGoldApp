@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/bottum_bar.dart';
 import '../controllers/language_data_provider.dart';
 import '../controllers/language_provider.dart';
 import '../controllers/profile_details.dart';
 import '../controllers/update_profile.dart';
+import '../helpers/security_storage.dart';
 import '../models/Language.dart';
 import '../utils/token_storage.dart';
 import 'Terms and condition.dart';
@@ -260,7 +263,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedNavIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+          _onNavItemTapped(index);
+        },
+      ),
+
     );
   }
 
@@ -541,7 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: TokenStorage.translate("Privacy Policy"),
                   subtitle: TokenStorage.translate("Readourterms"),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPolicyScreen()));
                   },
                 ),
                 // _buildListItem(
@@ -587,9 +599,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyles.subHeading.copyWith(fontSize: 15, fontWeight: FontWeight.w600)),
+                  Text(title, style: AppTextStyles.subHeading.copyWith(color: Colors.white)),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: AppTextStyles.bodyText.copyWith(fontSize: 13, color: Colors.white60)),
+                  Text(subtitle, style: AppTextStyles.bodyText.copyWith(color: Colors.white60)),
                 ],
               ),
             ),
@@ -602,6 +614,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildDivider() => Divider(color: Colors.white.withOpacity(0.05), height: 1);
 
+
+  _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1A1A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          'Logout',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to logout?',
+          style: GoogleFonts.poppins(
+            color: Colors.white70,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(
+                color: Colors.white60,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+
+              // 1️⃣ Remove token
+              await TokenStorage.removeToken();
+
+              // 2️⃣ Disable biometric (so password login will show)
+              await SecurityStorage.removeBiometric(false);
+
+              // 3️⃣ Navigate to login screen
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    (route) => false,
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFFD700),
+              foregroundColor: const Color(0xFF0A0A0A),
+            ),
+            child: Text(
+              'Logout',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   Widget _buildLogoutButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -609,19 +686,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         width: double.infinity,
         height: 56,
         child: OutlinedButton(
-          onPressed: () async {
-            await TokenStorage.removeToken(); // remove token
-
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false, // clear all routes
-            );
-          },
+          onPressed: _showLogoutDialog,
           style: OutlinedButton.styleFrom(
             side: const BorderSide(color: Colors.red, width: 2),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
           ),
+
+          // ✅ FIXED
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -639,42 +712,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1))),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
-              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _selectedNavIndex == index;
-    return InkWell(
-      onTap: () => _onNavItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? const Color(0xFFFFD700) : Colors.white60, size: 24),
-          const SizedBox(height: 4),
-          Text(label, style: AppTextStyles.subHeading.copyWith(fontSize: 11, fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal, color: isSelected ? const Color(0xFFFFD700) : Colors.white60)),
-        ],
-      ),
-    );
-  }
 }

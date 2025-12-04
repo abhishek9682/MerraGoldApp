@@ -5,6 +5,7 @@ import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../compenent/Custom_appbar.dart';
 import '../compenent/custom_style.dart';
 import '../compenent/loader.dart';
 import '../controllers/add_new_nominee.dart';
@@ -452,19 +453,23 @@ class _AddNomineeScreenState extends State<AddNomineeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          _isEditing ? TokenStorage.translate("Edit Nominee") : TokenStorage.translate("Add New Nominee"),
-          style: AppTextStyles.heading,
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: _isEditing ? TokenStorage.translate("Edit Nominee") : TokenStorage.translate("Add New Nominee"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back, color: Colors.white),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      //   title: Text(
+      //     _isEditing ? TokenStorage.translate("Edit Nominee") : TokenStorage.translate("Add New Nominee"),
+      //     style: AppTextStyles.heading,
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(20),

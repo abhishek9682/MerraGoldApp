@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
 import '../controllers/condition_policy.dart';
 import 'dashboard_screen.dart';
 import 'wallet_screen.dart';
@@ -34,23 +35,14 @@ class _TermsConditionsScreenState extends State<PrivacyPolicyScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          TokenStorage.translate("Privacy Policy"),
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Privacy Policy"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: provider.isLoading
           ? const Center(
         child: CircularProgressIndicator(color: Color(0xFFFFD700)),
@@ -118,13 +110,13 @@ class _TermsConditionsScreenState extends State<PrivacyPolicyScreen> {
             style: {
               "body": Style(
                 color: Colors.white70,
-                fontSize: FontSize(15),
+                fontSize: FontSize(14),
                 lineHeight: const LineHeight(1.6),
                 fontFamily: GoogleFonts.poppins().fontFamily,
               ),
-              "h1": Style(color: Color(0xFFFFD700)),
-              "h2": Style(color: Color(0xFFFFD700)),
-              "strong": Style(color: Colors.white),
+              "h1": Style(color: Color(0xFFFFD700),fontSize: FontSize(12)),
+              "h2": Style(color: Color(0xFFFFD700),fontSize: FontSize(14)),
+              "strong": Style(color: Colors.white,fontSize: FontSize(17)),
             },
           ),
 
@@ -133,60 +125,4 @@ class _TermsConditionsScreenState extends State<PrivacyPolicyScreen> {
       ),
     );
   }
-
-  // Widget _buildBottomNav() {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       color: const Color(0xFF1A1A1A),
-  //       border: Border(
-  //         top: BorderSide(color: Colors.white.withOpacity(0.1)),
-  //       ),
-  //     ),
-  //     child: SafeArea(
-  //       child: SizedBox(
-  //         height: 60,
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //           children: [
-  //             _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-  //             _buildNavItem(1, Icons.account_balance_wallet, "Wallet"),
-  //             _buildNavItem(2, Icons.history, "History"),
-  //             _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildNavItem(int index, IconData icon, String label) {
-  //   final isSelected = _selectedNavIndex == index;
-  //
-  //   return InkWell(
-  //     onTap: () => _onNavItemTapped(index),
-  //     borderRadius: BorderRadius.circular(12),
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(8),
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Icon(
-  //             icon,
-  //             size: 24,
-  //             color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-  //           ),
-  //           const SizedBox(height: 4),
-  //           Text(
-  //             label,
-  //             style: GoogleFonts.poppins(
-  //               fontSize: 11,
-  //               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-  //               color: isSelected ? const Color(0xFFFFD700) : Colors.white60,
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }

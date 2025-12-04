@@ -14,7 +14,8 @@ import 'create_account_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  // final bool terms;
+  const LoginScreen({super.key,});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -24,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool _acceptedTerms = false;
   bool _isButtonEnabled = false;
+  bool? result;
   // String? translated;
   @override
   initState()  {
@@ -142,16 +144,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Welcome Back Title
                 Text(
-                    TokenStorage.translate("Welcome Back"),
-                  style: AppTextStyles.heading
+                 TokenStorage.translate("Welcome Back"),
+                  style:AppTextStyles.loginHeading
                 ),
 
                 const SizedBox(height: 8),
 
                 // Subtitle
                 Text(
-                 TokenStorage.translate("Login to your account"),
-                  style: AppTextStyles.subHeading
+                  TokenStorage.translate("Login to your account"),
+                  style:AppTextStyles.loginSubHeading
                 ),
                 const SizedBox(height: 50),
 
@@ -159,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    TokenStorage.translate("Phone Number"),
+                    TokenStorage.translate("Enter mobile number"),
                     style:AppTextStyles.subInputText.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.white70,
@@ -189,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                      hintText: TokenStorage.translate("Phone Number"),
+                      hintText: TokenStorage.translate("Enter mobile number"),
                       hintStyle: AppTextStyles.inputText,
                       prefixIcon: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -235,6 +237,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     setState(() {
                       _acceptedTerms = !_acceptedTerms;
+                      setState(() {
+                        _acceptedTerms=result!;
+                      });
                       _validateForm();
                     });
                   },
@@ -272,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Colors.white70,
                             ),
                             children: [
-                              const TextSpan(text: 'I accept the '),
+                               TextSpan(text:TokenStorage.translate("I accept the")),
                               TextSpan(
                                 text: TokenStorage.translate("Terms & Conditions"),
                                 style: AppTextStyles.bodyText.copyWith(
@@ -281,17 +286,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   decoration: TextDecoration.underline,
                                 ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
+                                  ..onTap = () async {
                                     // Navigate to the Privacy Policy Screen
-                                    Navigator.push(
-                                      context,
+                                     result= await Navigator.push(context,
                                       MaterialPageRoute(
                                         builder: (context) => TermsConditionsScreen(),
                                       ),
                                     );
+                                    setState(() {
+                                      _acceptedTerms=result!;
+                                    });
                                   },
                               ),
-                              const TextSpan(text: ' and '),
+                              const TextSpan(text: ' & '),
 
                         TextSpan(
                         text:TokenStorage.translate("Privacy Policy"),
@@ -301,9 +308,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: TextDecoration.underline,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
+                            ..onTap = () async {
                               // Navigate to the Privacy Policy Screen
-                              Navigator.push(
+                              _acceptedTerms=await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PrivacyPolicyScreen(),

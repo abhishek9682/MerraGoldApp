@@ -3,6 +3,7 @@ import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../compenent/Custom_appbar.dart';
 import '../controllers/investment_transaction_controller.dart';
 import '../models/investment_plans.dart';
 import '../models/investment_transaction.dart' hide Plan;
@@ -55,19 +56,12 @@ class _PlanTransactionHistoryContent extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0B0B0B),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(TokenStorage.translate("Plan invest history"),
-            style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 18)),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Plan invest history"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
 
       body: provider.isLoading

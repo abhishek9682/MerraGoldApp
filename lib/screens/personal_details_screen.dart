@@ -3,6 +3,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:goldproject/compenent/loader.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../controllers/profile_details.dart';
 import '../controllers/submit_kyc.dart';
 import '../controllers/update_profile.dart';
@@ -44,7 +46,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Map<String, String> kycId = {};
   Map<String, File> kycField = {};
   bool isKycDone = true;
-  bool iskycCompleted=false;
+  bool iskycCompleted = false;
   String kycStatus = "Pending";
   int myCount = 0;
 
@@ -83,12 +85,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         print("kyc pending forms ${p?.pendingKycForms?.length}");
         setState(() {
           isKycDone = p?.pendingKycForms?.length == 0;
-          iskycCompleted=p?.kycStatus=="approved";
+          iskycCompleted = p?.kycStatus == "approved";
           _firstNameController.text = p?.firstname ?? 'N/A';
           _lastNameController.text = p?.lastname ?? '';
           _emailController.text = p?.email ?? '';
           _phoneController.text = p?.phone ?? '';
-          _dobController.text = p?.dateOfBirth??'1/02/2002';
+          _dobController.text = p?.dateOfBirth ?? '1/02/2002';
           _addressController.text = p?.address ?? '';
           _cityController.text = p?.city ?? '';
           _stateController.text = p?.state ?? '';
@@ -102,8 +104,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
               : p?.gender == "other"
               ? 'Other'
               : 'Male';
-          profileImage=p?.image;
-
+          profileImage = p?.image;
         });
       }
     } catch (e) {
@@ -246,35 +247,42 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   void _showImagePreview(File imageFile) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.7,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: FileImage(imageFile),
-                  fit: BoxFit.contain,
+      builder: (context) =>
+          Dialog(
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: [
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.9,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: FileImage(imageFile),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: CircleAvatar(
-                backgroundColor: Colors.black54,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: () => Navigator.pop(context),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black54,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
@@ -329,7 +337,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Future<void> _pickPanFile(int kyc_id, String kyc_field) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'avif'],
     );
 
     if (result != null && result.files.single.path != null) {
@@ -337,7 +345,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
       // Show preview for images
       if (kyc_field.toLowerCase().contains('image') ||
-          ['jpg', 'jpeg', 'png']
+          ['jpg', 'jpeg', 'png', 'avif']
               .contains(result.files.single.extension?.toLowerCase())) {
         //_showImagePreview(pickedFile);
       }
@@ -361,7 +369,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
       final pickedFile = File(result.files.single.path!);
 
       // Show preview
-     // _showImagePreview(pickedFile);
+      // _showImagePreview(pickedFile);
 
       setState(() {
         _selectedProfileImage = pickedFile;
@@ -396,7 +404,9 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     if (picked != null) {
       setState(() {
         _dobController.text =
-        '${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
+        '${picked.day.toString().padLeft(2, '0')}-${picked.month
+            .toString()
+            .padLeft(2, '0')}-${picked.year}';
       });
     }
   }
@@ -441,8 +451,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         "pan_number": _panController.text.trim(),
         "aadhar_number": _aadharController.text.trim(),
       };
-      print(
-          "aadhar no  ${_aadharController.text}  =============  Pan no is ${_panController}");
+      print("aadhar no  ${_aadharController
+          .text}  =============  Pan no is ${_panController}");
       Map<String, File> files = {
         if (_selectedProfileImage != null) 'image': _selectedProfileImage!
       };
@@ -484,10 +494,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     });
 
     try {
-      final kycProvider =
-      Provider.of<SubmitKycProvider>(context, listen: false);
-      final profileProvider =
-      Provider.of<ProfileDetailsProvider>(context, listen: false);
+      final kycProvider = Provider.of<SubmitKycProvider>(
+          context, listen: false);
+      final profileProvider = Provider.of<ProfileDetailsProvider>(
+          context, listen: false);
 
       Map<String, File> files = {
         for (var entry in kycField.entries) entry.key: entry.value
@@ -509,7 +519,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           kycId.clear();
           _currentStep = 0; // go back to step 1 after success
         });
-
       } else {
         final errorMessage = response?['data'] is List
             ? (response['data'] as List).join("\n")
@@ -602,22 +611,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        appBar: CustomAppBar(
+          title: TokenStorage.translate("Profile Details"),
+          onBack: () {
+            Navigator.pop(context);
+
+          },
+          showMore: true,
         ),
-        title: Text(
-          TokenStorage.translate("Profile Details"),
-          style: AppTextStyles.heading,
-        ),
-        centerTitle: true,
-      ),
-      body: _isLoading
+      body: _isUpdatingProfile || _isSubmittingKyc
           ? const Center(
-        child: CustomLoader(color: Colors.yellow,size: 50,),
+        child: CustomLoader(color: Colors.yellow, size: 50,),
       )
           : SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -641,7 +645,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 _buildSaveButtonDetails(),
                 const SizedBox(height: 20),
               ],
-                _displayDocuments(),
+              _displayDocuments(),
               // STEP 2: KYC DETAILS
               if (_currentStep == 1) ...[
                 const SizedBox(height: 32),
@@ -654,12 +658,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+      selectedIndex: _selectedNavIndex,
+      onItemSelected: _onNavItemTapped,
+    )
     );
   }
 
 
   Widget _buildProfilePictureSection() {
+    print("Profile Image URL => $profileImage");
+
     return Center(
       child: Column(
         children: [
@@ -680,19 +689,19 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     image: FileImage(_selectedProfileImage!),
                     fit: BoxFit.cover,
                   )
-                      : profileImage!=null?
+                      : profileImage != null ?
                   DecorationImage(
                     image: NetworkImage(profileImage!),
                     fit: BoxFit.cover,
                   )
-                      :null,
+                      : null,
                 ),
                 child: _selectedProfileImage == null
-                    ?  profileImage==null?const Icon(
+                    ? profileImage == null ? const Icon(
                   Icons.person,
                   size: 60,
                   color: Color(0xFF0A0A0A),
-                ):null:null,
+                ) : null : null,
               ),
               Positioned(
                 bottom: 0,
@@ -734,7 +743,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("Personal Information"), style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("Personal Information"),
+            style: AppTextStyles.subHeading1),
         const SizedBox(height: 16),
         _buildTextField(
           label: TokenStorage.translate("Firstname").toUpperCase(),
@@ -744,14 +754,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         ),
         const SizedBox(height: 16),
         _buildTextField(
-          label:  TokenStorage.translate("Lastname").toUpperCase(),
+          label: TokenStorage.translate("Lastname").toUpperCase(),
           controller: _lastNameController,
           icon: Icons.person_outline,
           errorText: _fieldErrors['lastName'],
         ),
         const SizedBox(height: 16),
         _buildTextField(
-          label:  TokenStorage.translate("Email Address"),
+          label: TokenStorage.translate("Email Address"),
           controller: _emailController,
           icon: Icons.email_outlined,
           keyboardType: TextInputType.emailAddress,
@@ -782,7 +792,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("Additional Information"), style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("Additional Information"),
+            style: AppTextStyles.subHeading1),
         const SizedBox(height: 16),
         _buildTextField(
           label: TokenStorage.translate("Address"),
@@ -796,7 +807,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           children: [
             Expanded(
               child: _buildTextField(
-                label:TokenStorage.translate("City/Town"),
+                label: TokenStorage.translate("City/Town"),
                 controller: _cityController,
                 icon: Icons.location_city,
                 hint: TokenStorage.translate("City/Town"),
@@ -877,10 +888,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     final kycDocs =
         profileProvider.profileData?.data?.profile?.kycDocuments ?? [];
 
-    return kycDocs.isEmpty?SizedBox():Column(
+    return kycDocs.isEmpty ? SizedBox() : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("Uploaded Documents"), style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("Uploaded Documents"),
+            style: AppTextStyles.subHeading1),
         const SizedBox(height: 12),
         if (kycDocs.isEmpty)
           Text("No documents uploaded yet", style: AppTextStyles.subHeading),
@@ -933,7 +945,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("KYC Documents"), style: AppTextStyles.subHeading1),
+        Text(TokenStorage.translate("KYC Documents"),
+            style: AppTextStyles.subHeading1),
         const SizedBox(height: 12),
         ...kycDocs.map((group) {
           String name = group.kycName ?? "";
@@ -1076,7 +1089,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   ? Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => const Icon(
+                errorBuilder: (context, error, stackTrace) =>
+                const Icon(
                   Icons.document_scanner,
                   color: Colors.white70,
                   size: 28,
@@ -1185,7 +1199,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("DD-MM-YYYY"), style: AppTextStyles.subHeading),
+        Text(TokenStorage.translate("DD-MM-YYYY"),
+            style: AppTextStyles.subHeading),
         const SizedBox(height: 8),
         InkWell(
           onTap: iskycCompleted ? null : _selectDate,
@@ -1218,7 +1233,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(TokenStorage.translate("Select Gender"), style: AppTextStyles.subHeading),
+        Text(TokenStorage.translate("Select Gender"),
+            style: AppTextStyles.subHeading),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1230,7 +1246,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: _selectedGender.isEmpty ? null : _selectedGender,
-              hint:  Text(
+              hint: Text(
                 TokenStorage.translate("Select Gender"),
                 style: AppTextStyles.subHeading,
               ),
@@ -1333,12 +1349,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     // Wizard behaviour: if KYC is pending, this will SAVE & GO NEXT.
     final bool goToNext = !isKycDone;
 
-    return iskycCompleted?SizedBox():SizedBox(
+    return iskycCompleted ? SizedBox() : SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
         onPressed:
-        _isUpdatingProfile ? null : () => _submitProfileUpdate(goToStep2: goToNext),
+        _isUpdatingProfile ? null : () =>
+            _submitProfileUpdate(goToStep2: goToNext),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFFD700),
           foregroundColor: const Color(0xFF0A0A0A),
@@ -1359,55 +1376,4 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     );
   }
 
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border(
-            top: BorderSide(color: Colors.white.withOpacity(0.1))),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
-              _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
-              _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _selectedNavIndex == index;
-    return InkWell(
-      onTap: () => _onNavItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon,
-              color:
-              isSelected ? const Color(0xFFFFD700) : Colors.white60,
-              size: 24),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: AppTextStyles.subHeading.copyWith(
-              color: isSelected
-                  ? const Color(0xFFFFD700)
-                  : Colors.white60,
-              fontWeight:
-              isSelected ? FontWeight.w600 : FontWeight.normal,
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

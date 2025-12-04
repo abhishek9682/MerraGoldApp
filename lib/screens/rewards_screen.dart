@@ -255,6 +255,8 @@
 import 'package:flutter/material.dart';
 import 'package:goldproject/screens/reward_history.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/transaction_list.dart'; // TransactionProvider
 import '../models/Transaction_list.dart';
@@ -296,12 +298,12 @@ class _RewardsScreenState extends State<RewardsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: const BackButton(color: Colors.white),
-        title: Text('Rewards Center', style: AppTextStyles.appBarTitle),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate('Rewards Center'),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
 
       // --------------------------- BODY ------------------------------
@@ -381,7 +383,16 @@ class _RewardsScreenState extends State<RewardsScreen> {
         },
       ),
 
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedNavIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+          _onNavItemTapped(index);
+        },
+      ),
+
     );
   }
 

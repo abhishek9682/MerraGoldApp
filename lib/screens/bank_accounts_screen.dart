@@ -4,6 +4,7 @@ import 'package:goldproject/screens/personal_details_screen.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/Delete_Bank.dart';
 import '../controllers/profile_details.dart';
@@ -150,7 +151,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
         border: Border.all(
           color: isPrimary ? Colors.amber : Colors.white12,
         ),
-        color: const Color(0xFF1A1A1A),
+        color:const Color(0xFFFFD600).withOpacity(0.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,12 +160,29 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                bank.bankName ?? "-",
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2A2A2A),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.account_balance,
+                  color: Color(0xFFFFD700),
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 10,),
+
+              Expanded(
+                child: Text(
+                  bank.bankName ?? "-",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               isVarified==false ?InkWell(
@@ -271,16 +289,14 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title:  Text(TokenStorage.translate("Select Bank Currency"),style: TextStyle(color: Colors.white),),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Select Bank Currency"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
 
       body:_loadingAction?Center(child: CustomLoader(),):ListView(
           padding: const EdgeInsets.all(20),

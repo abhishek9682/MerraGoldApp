@@ -3,6 +3,8 @@ import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/models/convert_gold_or_money.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/profile_details.dart';
@@ -173,16 +175,14 @@ class _SellGoldPaymentScreenState extends State<SellGoldPaymentScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text('Sell Gold', style: AppTextStyles.pageTitle),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate('Sell Gold'),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -217,7 +217,16 @@ class _SellGoldPaymentScreenState extends State<SellGoldPaymentScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedNavIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+          _onNavItemTapped(index);
+        },
+      ),
+
     );
   }
 

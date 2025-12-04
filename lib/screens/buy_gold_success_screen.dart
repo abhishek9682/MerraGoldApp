@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goldproject/models/gold_purchage.dart';
 import 'package:goldproject/utils/token_storage.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import 'package:intl/intl.dart';
 import 'dashboard_screen.dart';
@@ -251,7 +252,10 @@ class _BuyGoldSuccessScreenState extends State<BuyGoldSuccessScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedNavIndex,
+          onItemSelected: _onNavItemTapped,
+        )
     );
   }
 

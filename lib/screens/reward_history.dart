@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
 import '../controllers/transaction_list.dart';
 import '../models/Transaction_list.dart';
 import '../compenent/custom_style.dart';
+import '../utils/token_storage.dart';
 
 class RewardHistoryScreen extends StatelessWidget {
   const RewardHistoryScreen({super.key});
@@ -28,13 +30,14 @@ class RewardHistoryScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: const BackButton(color: Colors.white),
-        title: Text("Reward History", style: AppTextStyles.appBarTitle),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Reward History"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
 
       body: rewards.isEmpty
           ? Center(

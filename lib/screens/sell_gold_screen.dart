@@ -3,6 +3,8 @@ import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/screens/personal_details_screen.dart';
 import 'package:goldproject/screens/sell_gold_payment_screen.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/profile_details.dart';
@@ -83,9 +85,9 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
       // "All" option (6.61g (All) style)
       if (totalGold > 0 && totalValue > 0) {
         _quickAmounts.add({
-          'amount': totalValue.round(), // or totalValue as double
-          'gold': double.parse(totalGold.toStringAsFixed(3)),
-          'label': '${totalGold.toStringAsFixed(2)}g (All)',
+          'amount': profile.goldBalanceValue, // or totalValue as double
+          'gold':profile.goldBalance,
+          'label': '${profile.goldBalanceValue}g (All)',
         });
       }
     });
@@ -270,16 +272,14 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
     final goldPro = Provider.of<GoldSellProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        appBar: CustomAppBar(
+          title: TokenStorage.translate("Sell Gold"),
+          onBack: () {
+            Navigator.pop(context);
+          },
+          showMore: true,
         ),
-        title: Text(TokenStorage.translate("Sell Gold"), style: AppTextStyles.pageTitle),
-        centerTitle: true,
-      ),
+
       body: isLoading?Center(child: CustomLoader(),):SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -301,7 +301,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                     children: [
                       Text('Total Gold', style: AppTextStyles.body13W600Gold),
                       const SizedBox(height: 4),
-                      Text('${provider.profileData?.data?.profile?.goldBalance}g', style: AppTextStyles.body24W700Gold),
+                      Text('₹${provider.profileData?.data?.profile?.goldBalance}g', style: AppTextStyles.body24W700Gold),
                     ],
                   ),
                   Column(
@@ -309,9 +309,9 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                     children: [
                       Text('Current Value', style: AppTextStyles.body13W600Gold),
                       const SizedBox(height: 4),
-                      Text('${provider.profileData?.data?.profile?.goldBalanceValue}',
+                      Text('₹${provider.profileData?.data?.profile?.goldBalanceValue}',
                           style: AppTextStyles.body24W700Gold),
-                      Text('${provider.profileData?.data?.profile?.currentGoldPricePerGram}',
+                      Text('${provider.profileData?.data?.profile?.currentGoldPricePerGram}/g',
                           style: AppTextStyles.body12White60),
                     ],
                   ),
@@ -427,6 +427,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                     isSelected: _selectedQuickAmount == index,
                     onTap: () => _selectQuickAmount(index),
                   );
+
                 }),
                 _buildQuickAmountChip(
                   amount: TokenStorage.translate("custom"),
@@ -491,7 +492,16 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedNavIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+          _onNavItemTapped(index);
+        },
+      ),
+
     );
   }
 

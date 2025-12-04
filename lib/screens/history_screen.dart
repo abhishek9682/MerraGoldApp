@@ -3,6 +3,7 @@ import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../compenent/bottum_bar.dart';
 import '../controllers/transaction_list.dart';
 
 import '../models/Transaction_list.dart';
@@ -64,7 +65,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ? const Center(
           child: CircularProgressIndicator(color: Color(0xFFFFD700)))
           : _buildBody(provider),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: _onNavItemTapped,
+      ),
     );
   }
 

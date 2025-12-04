@@ -4,6 +4,8 @@ import 'package:goldproject/controllers/profile_details.dart';
 import 'package:goldproject/screens/personal_details_screen.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/buy_gold.dart';
 import '../controllers/gold_data.dart';
@@ -152,16 +154,14 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
     //final provider = Provider.of<GoldDetails>(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(TokenStorage.translate('Payment Details'), style: AppTextStyles.pageTitle),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate('Payment Details'),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: isLoading?Center(child: CustomLoader(),):SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -337,7 +337,10 @@ class _BuyGoldPaymentScreenState extends State<BuyGoldPaymentScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedNavIndex,
+          onItemSelected: _onNavItemTapped,
+        )
     );
   }
 

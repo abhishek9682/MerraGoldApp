@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/profile_details.dart';
 import 'dashboard_screen.dart';
@@ -101,19 +103,14 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          TokenStorage.translate("Refer & Earn"),
-          style: AppTextStyles.appBarTitle,
-        ),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Refer & Earn"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -135,7 +132,11 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedNavIndex,
+          onItemSelected: _onNavItemTapped,
+        )
+
     );
   }
 
@@ -207,7 +208,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${provider.profileData?.data?.profile?.referralCode}", style: AppTextStyles.referralCode24W600Gold),
+                Expanded(child: Text("${provider.profileData?.data?.profile?.referralCode}", style: AppTextStyles.referralCode24W600Gold)),
               ],
             ),
           ),
@@ -315,9 +316,14 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildStatCard(icon: Icons.people, value: '${provider.profileData?.data?.profile?.referralStats?.totalReferrals}', label: TokenStorage.translate("Total Referrals"))),
+              Expanded(child: _buildStatCard(icon: Icons.people,
+                  value: '${provider.profileData?.data?.profile?.referralStats?.totalReferrals}',
+                  label: TokenStorage.translate("Total Referrals"))),
               const SizedBox(width: 12),
-              Expanded(child: _buildStatCard(icon: Icons.account_balance_wallet, value: '${provider.profileData?.data?.profile?.referralStats?.totalBonusEarned}', label: TokenStorage.translate("Total Earned"))),
+
+              Expanded(child: _buildStatCard(icon: Icons.account_balance_wallet,
+                  value: '${provider.profileData?.data?.profile?.referralStats?.totalBonusEarned}',
+                  label: TokenStorage.translate("Total Earned"))),
             ],
           ),
         ],

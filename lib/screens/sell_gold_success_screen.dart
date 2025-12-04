@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goldproject/models/convert_gold_or_money.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/gold_data.dart';
 import '../controllers/sell_gold.dart';
@@ -248,7 +249,16 @@ class _SellGoldSuccessScreenState extends State<SellGoldSuccessScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: _selectedNavIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+          _onNavItemTapped(index);
+        },
+      ),
+
     );
   }
 

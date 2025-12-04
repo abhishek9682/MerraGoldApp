@@ -3,6 +3,8 @@ import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../controllers/profile_details.dart';
 import 'history_screen.dart';
 import 'profile_screen.dart';
@@ -75,34 +77,14 @@ class _WalletScreenState extends State<WalletScreen> {
     final provider= Provider.of<ProfileDetailsProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const DashboardScreen()),
-            );
-          },
-        ),
-        title: Text(
-          TokenStorage.translate( "View My Wallet"),
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: TokenStorage.translate( "View My Wallet"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: isLoading?Center(child: CustomLoader(),):SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(20),
@@ -118,7 +100,11 @@ class _WalletScreenState extends State<WalletScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedIndex,
+          onItemSelected: _onNavItemTapped,
+        )
+
     );
   }
 
@@ -205,7 +191,7 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-           "${provider.profileData?.data?.profile?.goldBalanceValue}",
+           "₹${provider.profileData?.data?.profile?.goldBalanceValue}",
             style: GoogleFonts.poppins(
               fontSize: 42,
               fontWeight: FontWeight.bold,
@@ -228,7 +214,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${provider.profileData?.data?.profile?.goldInvestAmount}",
+                    "₹${provider.profileData?.data?.profile?.goldInvestAmount}",
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

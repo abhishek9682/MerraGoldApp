@@ -185,19 +185,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     );
   }
 
-  Widget _buildInputField(String label,
-      TextEditingController controller, IconData icon,
-      {TextInputType keyboardType = TextInputType.name}) {
+  Widget _buildInputField(
+      String label,
+      TextEditingController controller,
+      IconData icon, {
+        TextInputType keyboardType = TextInputType.name,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: AppTextStyles.subInputText.copyWith(
-                fontWeight: FontWeight.w600,
-                color: Colors.white70)
+        Text(
+          label,
+          style: AppTextStyles.subInputText.copyWith(
+            fontWeight: FontWeight.w600,
+            color: Colors.white70,
+          ),
         ),
 
         const SizedBox(height: 12),
+
         Container(
           decoration: BoxDecoration(
             color: const Color(0xFF1A1A1A),
@@ -206,17 +212,21 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
-            style:AppTextStyles.inputText,
+            style: AppTextStyles.inputText,
             decoration: InputDecoration(
-                prefixIcon:
-                Icon(icon, color: const Color(0xFFFFD700), size: 20),
-                border: InputBorder.none,
-                hintText: label),
+              prefixIcon: Icon(icon, color: const Color(0xFFFFD700), size: 20),
+              border: InputBorder.none,
+              hintText: label,
+
+              // ⭐ THIS MAKES TEXT PERFECTLY CENTERED ⭐
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
+            ),
           ),
         ),
       ],
     );
   }
+
 
   Widget _buildDateField() => InkWell(
     onTap: _selectDate,

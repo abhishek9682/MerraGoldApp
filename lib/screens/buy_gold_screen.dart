@@ -5,6 +5,8 @@ import 'package:goldproject/screens/personal_details_screen.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/buy_gold.dart';
 import '../controllers/gold_data.dart';
@@ -203,24 +205,14 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 8,
-        shadowColor: const Color(0xFFFFD700).withOpacity(0.2),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-         TokenStorage.translate( 'Buy Gold'),
-          style: GoogleFonts.poppins(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFFFFD700),
-          ),
-        ),
+      appBar: CustomAppBar(
+        title: TokenStorage.translate('Buy Gold'),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -243,7 +235,10 @@ class _BuyGoldScreenState extends State<BuyGoldScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedNavIndex,
+          onItemSelected: _onNavItemTapped,
+        )
     );
   }
 

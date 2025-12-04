@@ -4,6 +4,8 @@ import 'package:goldproject/compenent/loader.dart';
 import 'package:goldproject/controllers/profile_details.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
+import '../compenent/Custom_appbar.dart';
+import '../compenent/bottum_bar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/add_bank_account.dart';
 import '../models/get_profile_details.dart';
@@ -138,15 +140,12 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(TokenStorage.translate('Add Bank Account'), style: AppTextStyles.appBarTitle),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate('Add Bank Account'),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
       body: Consumer<BankAccountProvider>(
         builder: (context, provider, child) {
@@ -155,7 +154,10 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
               : _buildForm();
         },
       ),
-      bottomNavigationBar: _buildBottomNav(),
+        bottomNavigationBar: CustomBottomBar(
+          selectedIndex: _selectedNavIndex,
+          onItemSelected: _onNavItemTapped,
+        ),
     );
   }
 

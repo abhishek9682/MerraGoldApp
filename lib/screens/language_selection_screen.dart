@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:goldproject/compenent/snackbar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/language_data_provider.dart';
@@ -18,7 +20,7 @@ class LanguageSelectionScreen extends StatefulWidget {
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   LanguageData? selectedLanguage;
-  // TokenStorage storeLang=TokenStorage();
+  bool? defaultLang;
   String languageIs="";
   @override
   void initState() {
@@ -57,18 +59,25 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 children: [
                   Text(
                     'Choose Your Language',
-                    style: AppTextStyles.heading.copyWith(fontSize: 27)
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFFFD700),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Select your preferred language\nfor the best experience',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.subHeading
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      color: Colors.white70,
+                      height: 1.4,
+                    ),
                   ),
                 ],
               ),
             ),
-
             // Language Grid
             Expanded(
               child: Padding(
@@ -85,7 +94,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                   itemBuilder: (context, index) {
                     final language = providerLang.languages[index];
                     final isSelected = selectedLanguage?.id == language.id;
-
+                    // defaultLang=selectedLanguage?.id==providerLang;
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -131,6 +140,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                       child: Text(
                                         language.shortName!.toUpperCase(),
                                         style: AppTextStyles.heading.copyWith(
+                                          fontSize: 26,
                                           color: isSelected
                                               ? const Color(0xFFFFD700)
                                               : Colors.white,
@@ -143,7 +153,15 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
                                   Text(
                                     language.name!,
-                                    style: AppTextStyles.subHeading.copyWith(
+                                    style: AppTextStyles.bodyText.copyWith(
+                                      color: isSelected
+                                          ? const Color(0xFFFFD700)
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    language.shortName!,
+                                    style: AppTextStyles.bodyText.copyWith(
                                       color: isSelected
                                           ? const Color(0xFFFFD700)
                                           : Colors.white,

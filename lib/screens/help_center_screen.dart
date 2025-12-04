@@ -4,6 +4,7 @@ import 'package:goldproject/controllers/profile_details.dart';
 import 'package:goldproject/utils/token_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../compenent/Custom_appbar.dart';
 import '../compenent/custom_style.dart';
 import '../controllers/help_center_controllar.dart';
 import 'dashboard_screen.dart';
@@ -56,16 +57,12 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
     print("help center response--------->>> ${helpProvider.helpCenterResponse?.data}");
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A0A0A),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text( TokenStorage.translate("Help Center"),
-            style: AppTextStyles.pageTitleHelp.copyWith(color: Colors.white)),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: TokenStorage.translate("Help Center"),
+        onBack: () {
+          Navigator.pop(context);
+        },
+        showMore: true,
       ),
 
       body:isLoading

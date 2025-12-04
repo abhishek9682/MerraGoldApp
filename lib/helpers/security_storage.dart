@@ -14,6 +14,9 @@ class SecurityStorage {
   static Future<void> enableBiometric(bool enabled) async {
     await _storage.write(key: "biometric_enabled", value: enabled ? "1" : "0");
   }
+  static Future<void> removeBiometric(bool enabled) async {
+    await _storage.delete(key: "biometric_enabled");
+  }
 
   static Future<bool> isBiometricEnabled() async {
     return await _storage.read(key: "biometric_enabled") == "1";
