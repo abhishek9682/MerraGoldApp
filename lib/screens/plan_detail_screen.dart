@@ -441,6 +441,8 @@ class PlanDetailScreen extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               title: Text("Confirm Enrollment",
                   style: GoogleFonts.poppins(color: Colors.white)),
+
+              // ---------------------- CONTENT ----------------------
               content: isProcessing
                   ? SizedBox(
                 height: 80,
@@ -448,8 +450,44 @@ class PlanDetailScreen extends StatelessWidget {
                   child: CircularProgressIndicator(color: color),
                 ),
               )
-                  : Text("Enroll in $title?",
-                  style: GoogleFonts.poppins(color: Colors.white70)),
+                  : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  // Main confirmation text
+                  Text(
+                    "Enroll in $title?",
+                    style: GoogleFonts.poppins(
+                        color: Colors.white70,
+                        fontSize: 14
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  // ------------------- DETAILS BOX -------------------
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A1A1A),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _infoRow("Bank ID:", bankId?.toString() ?? "N/A"),
+                        const SizedBox(height: 8),
+                        _infoRow("Start Date:", _formattedNow()),
+                        const SizedBox(height: 8),
+                        _infoRow("Auto-Renewal:", "Enabled"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // ---------------------- ACTIONS ----------------------
               actions: [
                 if (!isProcessing)
                   TextButton(
@@ -457,6 +495,7 @@ class PlanDetailScreen extends StatelessWidget {
                     child: Text("Cancel",
                         style: GoogleFonts.poppins(color: Colors.white70)),
                   ),
+
                 if (!isProcessing)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: color),
@@ -472,7 +511,7 @@ class PlanDetailScreen extends StatelessWidget {
                         return;
                       }
 
-                      // ✅ START LOADER
+                      // START LOADER
                       setState(() => isProcessing = true);
 
                       final now = DateTime.now();
@@ -493,21 +532,22 @@ class PlanDetailScreen extends StatelessWidget {
                       await enrollProvider.enrollInvestment(body);
 
                       if (enrollProvider.success) {
-                        // Success snackbar
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.green,
-                            content: Text(enrollProvider.message??"Enrolled Successfully",
-                                style: GoogleFonts.poppins()),
+                            content: Text(
+                              enrollProvider.message ?? "Enrolled Successfully",
+                              style: GoogleFonts.poppins(),
+                            ),
                           ),
                         );
 
-                        // ⭐ Call plans provider instantly
-                        final plansProvider = context
-                            .read<InvestmentPlansProvider>();
+                        // Refresh Plans
+                        final plansProvider =
+                        context.read<InvestmentPlansProvider>();
                         await plansProvider.getInvestmentPlans();
 
-                        // ⭐ Redirect back to Dashboard
+                        // Redirect Dashboard
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -519,13 +559,12 @@ class PlanDetailScreen extends StatelessWidget {
                           SnackBar(
                             backgroundColor: Colors.red,
                             content: Text(
-                                "Not Enrolled: ${enrollProvider.message}",
-                                style: GoogleFonts.poppins(),
+                              "Not Enrolled: ${enrollProvider.message}",
+                              style: GoogleFonts.poppins(),
                             ),
                           ),
                         );
 
-                        // Close dialog on failure
                         Navigator.pop(dialogCtx);
                       }
                     },
@@ -537,6 +576,37 @@ class PlanDetailScreen extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+// ---------------------- HELPERS ----------------------
+
+  String _formattedNow() {
+    final now = DateTime.now();
+    return "${now.year}-${now.month}-${now.day} "
+        "${now.hour}:${now.minute}:${now.second}";
+  }
+
+  Widget _infoRow(String title, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.poppins(
+            color: Colors.white54,
+            fontSize: 13,
+          ),
+        ),
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

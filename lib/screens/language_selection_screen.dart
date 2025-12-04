@@ -22,6 +22,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   LanguageData? selectedLanguage;
   bool? defaultLang;
   String languageIs="";
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +105,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         final langResponse=  Provider.of<LanguageDataProvider>(context,listen: false);
                         langResponse.getLanguageData(language.id.toString());
                         languageIs=language.name!;
-                        print("------------$langResponse");
+
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -121,6 +122,31 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                         ),
                         child: Stack(
                           children: [
+                            if (language.shortName=="en")
+                              Positioned(
+                                top: 6,
+                                right: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFD700),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    'POPULAR',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF0A0A0A),
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Column(
