@@ -425,7 +425,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Total Returns',
                     style: GoogleFonts.poppins(
                       fontSize: 13,
-                      color: const Color(0xFF0A0A0A).withOpacity(0.7),
+                      color: Colors.green,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -472,12 +472,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.white,
                 ),
               ),
-              Text(
-                '${TokenStorage.translate('custom')} ',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: const Color(0xFFFFD700),
-                  fontWeight: FontWeight.w500,
+              InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BuyGoldScreen()));
+                },
+                child: Text(
+                  '${TokenStorage.translate('custom')} ',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: const Color(0xFFFFD700),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -776,8 +781,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
   Widget _buildPlanCard(Plan plan) {
-    final isPurchased = _purchasedPlans.contains(plan.name);
-    // final active = plan.isSubscribed ? "Active"  : null;
+    // final isPurchased = _purchasedPlans.contains(plan.name);
+    final active = plan.isSubscribed ? "Active"  : "premium";
     String? badge = plan.userSubscriptionStatus;
     final badgeColor = plan.isSubscribed ? Colors.green :  Color(0xFFFFD700);
     return GestureDetector(
@@ -819,8 +824,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
 
-            const SizedBox(width: 50),
-            if (badge != null)
+            const SizedBox(width: 32),
+            // if (badge != null)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
@@ -828,7 +833,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  badge,
+                  active,
                   style: GoogleFonts.poppins(
                     fontSize: 9,
                     fontWeight: FontWeight.w600,

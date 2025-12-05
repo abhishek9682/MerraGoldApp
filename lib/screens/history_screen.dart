@@ -194,24 +194,70 @@ class _HistoryScreenState extends State<HistoryScreen> {
           "status": txn.transactionType ?? "",
         });
       },
-      leading: Icon(
-        isBuy ? Icons.arrow_downward : Icons.arrow_upward,
-        color: isBuy ? Colors.green : Colors.red,
+      leading: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: isBuy
+              ? const Color(0xFFFFD700).withOpacity(0.1)
+              : Colors.red.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          isBuy ? Icons.arrow_downward : Icons.arrow_upward,
+          color: isBuy ? const Color(0xFFFFD700) : Colors.red,
+          size: 24,
+        ),
       ),
       title: Text(
-        TokenStorage.translate(isBuy ? "Gold Purchase" : "Gold Sell"),
-        style: const TextStyle(color: Colors.white),
+        TokenStorage.translate(isBuy ? "Purchase" : "Sell"),
+        style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
       ),
-      subtitle: Text(
-        txn.createdAt ?? "",
-        style: const TextStyle(color: Colors.white38),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            txn.createdAt ?? "",
+            style: TextStyle(fontSize: 12,
+              color: Colors.white60,),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "Txn ID: ${txn.trxId ?? "-"}",
+            style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 12),
+          ),
+        ],
       ),
-      trailing: Text(
-        "₹${txn.amount}",
-        style: const TextStyle(color: Colors.white),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            "₹${txn.amount}",
+            style: const TextStyle( fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,),
+          ),
+          const SizedBox(height: 4),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: Colors.green.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child:Text(
+            txn.transactionType ?? "-",
+            style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.w600,
+                fontSize: 12),
+          ),
+      )
+        ],
       ),
     );
   }
+
 
   Widget _rewardItem(TransactionItem txn) {
     return ListTile(
@@ -225,11 +271,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
           "status": TokenStorage.translate("Reward"),
         });
       },
-      leading: const Icon(Icons.card_giftcard, color: Colors.blueAccent),
+
+      leading:   Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(
+          Icons.card_giftcard,
+          color: Colors.blueAccent,
+          size: 24,
+        ),
+      ),
       title: Text(TokenStorage.translate(txn.remarks ?? "Reward"),
           style: const TextStyle(color: Colors.white)),
       subtitle: Text(txn.createdAt ?? "",
-          style: const TextStyle(color: Colors.white38)),
+        style:  TextStyle(color:  Colors.white.withOpacity(0.4))),
       trailing: Text("₹${txn.amount}",
           style: const TextStyle(color: Colors.blueAccent)),
     );
@@ -262,6 +321,28 @@ class _HistoryScreenState extends State<HistoryScreen> {
               _detail(TokenStorage.translate( "Transaction ID"), data["id"]),
               _detail("Date", data["date"]),
               _detail(TokenStorage.translate("Status"), data["status"]),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFFD700),
+                    foregroundColor: const Color(0xFF0A0A0A),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -275,8 +356,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: Text(k, style: const TextStyle(color: Colors.white54))),
-          Expanded(child: Text(v, style: const TextStyle(color: Colors.white))),
+          Expanded(child: Text(k, style: const TextStyle(color: Colors.white60,fontSize: 14,))),
+          Expanded(child: Text(v, style: const TextStyle(fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white))),
         ],
       ),
     );

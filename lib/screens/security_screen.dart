@@ -203,7 +203,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
             children: [
               _buildNavItem(0, Icons.home, TokenStorage.translate("Home")),
               _buildNavItem(1, Icons.account_balance_wallet, TokenStorage.translate("Wallet")),
-              _buildNavItem(2, Icons.history, TokenStorage.translate("Transaction History")),
+              _buildNavItem(2, Icons.history, TokenStorage.translate("History")),
               _buildNavItem(3, Icons.person, TokenStorage.translate("Profile")),
             ],
           ),

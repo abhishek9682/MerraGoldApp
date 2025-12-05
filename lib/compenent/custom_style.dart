@@ -181,7 +181,7 @@ class AppTextStyles {
   );
 
   static final subInputText = GoogleFonts.poppins(
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
     color: const Color(0xFF0A0A0A),
   );

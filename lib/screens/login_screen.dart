@@ -7,6 +7,7 @@ import '../compenent/custom_style.dart';
 import '../compenent/loader.dart';
 import '../constants/constant.dart';
 import '../controllers/otp_response.dart';
+import '../controllers/transaction_list.dart';
 import '../utils/token_storage.dart';
 import 'Terms and condition.dart';
 import 'otp_verification_screen.dart';
@@ -31,7 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
   initState()  {
     super.initState();
     _phoneController.addListener(_validateForm);
+    clearTrasaction();
      // translated =  await TokenStorage.translate("Phone Number");
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final txnProvider =
+    //   Provider.of<TransactionProvider>(context, listen: false);
+    //
+    //   txnProvider.transactions.clear();   // <-- Clear old transaction list
+    // });
+  }
+  clearTrasaction(){
+    final txnProvider =
+    Provider.of<TransactionProvider>(context, listen: false);
+
+    txnProvider.transactions.clear();
   }
 
   @override
@@ -165,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style:AppTextStyles.subInputText.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.white70,
-                      letterSpacing: 1,
+                      // letterSpacing: 1,
                     )
                   ),
                 ),
@@ -236,10 +250,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 InkWell(
                   onTap: () {
                     setState(() {
+                      // setState(() {
+                      //   _acceptedTerms=result!;
+                      // });
                       _acceptedTerms = !_acceptedTerms;
-                      setState(() {
-                        _acceptedTerms=result!;
-                      });
+
                       _validateForm();
                     });
                   },
@@ -293,9 +308,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         builder: (context) => TermsConditionsScreen(),
                                       ),
                                     );
-                                    setState(() {
-                                      _acceptedTerms=result!;
-                                    });
+                                     if (result == true) {
+                                       setState(() {
+                                         _acceptedTerms = true;
+                                         _validateForm();
+                                       });
+                                     }
                                   },
                               ),
                               const TextSpan(text: ' & '),
@@ -384,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'New user? ',
+                      TokenStorage.translate("New user?"),
                       style: AppTextStyles.bodyText.copyWith(color: Colors.white60)
                     ),
                     InkWell(

@@ -83,13 +83,13 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
       }
 
       // "All" option (6.61g (All) style)
-      if (totalGold > 0 && totalValue > 0) {
+      // if (totalGold > 0 && totalValue > 0) {
         _quickAmounts.add({
           'amount': profile.goldBalanceValue, // or totalValue as double
           'gold':profile.goldBalance,
-          'label': '${profile.goldBalanceValue}g (All)',
+          'label': '${profile.goldBalance}g (All)',
         });
-      }
+      // }
     });
    setState(() {
      isLoading=false;
@@ -135,10 +135,8 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
     );
   }
 
-  final TextEditingController _amountController =
-  TextEditingController(text: '');
-  final TextEditingController _goldController =
-  TextEditingController(text: '');
+  final TextEditingController _amountController = TextEditingController(text: '');
+  final TextEditingController _goldController = TextEditingController(text: '');
 
 
   @override
@@ -223,10 +221,10 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
 
 
   void _continueToPayment() async {
-    final goldProvider = Provider.of<GoldSellProvider>(context, listen: false);
     final profileProvider = Provider.of<ProfileDetailsProvider>(context, listen: false);
     final double gold = double.tryParse(_goldController.text.trim()) ?? 0;
     final double amount = double.tryParse(_amountController.text.trim()) ?? 0;
+
     if (gold <= 0 || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(TokenStorage.translate("Enter a valid amount or gold weight"))),
@@ -234,37 +232,40 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
       return;
     }
 
-    goldLoading=goldProvider.isLoading;
-
-    if(profileProvider.profileData!.data!.profile!.kycStatus!="approved")
-    {
-       Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalDetailsScreen()));
-       return;
+    if (profileProvider.profileData!.data!.profile!.kycStatus != "approved") {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PersonalDetailsScreen()));
+      return;
     }
-    Map<String, dynamic> body = {
-      "gold_grams": gold,
-      "payment_method": "bank_transfer",
-      "bank_account_id": profileProvider.primaryBank?.id,
-    };
 
-    final success = await goldProvider.sellGold(body);
-    debugPrint("Sell Request Body => $body--${success}");
-    goldLoading=goldProvider.isLoading;
+    // Parse gold balance
+    double balance = double.tryParse(
+        profileProvider.profileData?.data?.profile?.goldBalanceValue ?? "0"
+    ) ?? 0.0;
 
-    if(success==false){
+    // 🛑 If balance is less than required gold
+    if (balance < amount) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("${goldProvider.res}"),
-            backgroundColor: Colors.red,
-          ));
+        const SnackBar(
+          content: Text("Not enough gold balance"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
     }
-    else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-          SellGoldPaymentScreen(selectId: _selectedBankId!,
-            goldAmount: gold,
-            cashAmount: amount,)));
-    }
+
+    // Proceed
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SellGoldPaymentScreen(
+          selectId: _selectedBankId!,
+          goldAmount: gold,
+          cashAmount: amount,
+        ),
+      ),
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +300,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Total Gold', style: AppTextStyles.body13W600Gold),
+                      Text(TokenStorage.translate("Total Gold"), style: AppTextStyles.body13W600Gold),
                       const SizedBox(height: 4),
                       Text('₹${provider.profileData?.data?.profile?.goldBalance}g', style: AppTextStyles.body24W700Gold),
                     ],
@@ -307,7 +308,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('Current Value', style: AppTextStyles.body13W600Gold),
+                      Text(TokenStorage.translate("Current Value"), style: AppTextStyles.body13W600Gold),
                       const SizedBox(height: 4),
                       Text('₹${provider.profileData?.data?.profile?.goldBalanceValue}',
                           style: AppTextStyles.body24W700Gold),
@@ -330,14 +331,14 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
               child: Row(
                 children: [
                   Expanded(
-                      child: _buildToggleButton('By Amount', _isByAmount, () {
+                      child: _buildToggleButton(TokenStorage.translate("By Amount"), _isByAmount, () {
                         setState(() {
                           _isByAmount = true;
                         });
                       })),
                   Expanded(
                       child:
-                      _buildToggleButton('By Gold Weight', !_isByAmount, () {
+                      _buildToggleButton(TokenStorage.translate("By Gold Weight"), !_isByAmount, () {
                         setState(() {
                           _isByAmount = false;
                         });
@@ -359,8 +360,8 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                 children: [
                   Text(
                     _isByAmount
-                        ? 'Enter Amount to Withdraw'
-                        : 'Enter Gold Weight to Sell',
+                        ? TokenStorage.translate("Enter Amount to Withdraw")
+                        :TokenStorage.translate("Enter Gold Weight to Sell"),
                     style: AppTextStyles.body14White70,
                   ),
                   const SizedBox(height: 16),
@@ -397,12 +398,12 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   const SizedBox(height: 16),
                   Text(
                     _isByAmount
-                        ? '= ${_goldController.text} grams'
+                        ? '= ${_goldController.text} ${TokenStorage.translate('grams')}'
                         : '= ₹${_amountController.text}',
                     style: AppTextStyles.body16W600White,
                   ),
                   const SizedBox(height: 4),
-                  Text('Current gold rate: ₹$goldRate/gram',
+                  Text('${TokenStorage.translate("Current gold rate")}: ₹$goldRate/gram',
                       style: AppTextStyles.body12White60),
                 ],
               ),
@@ -461,7 +462,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Once confirmed, this transaction cannot be reversed. Funds will be credited to your registered bank account within 24 hours.',
+                      TokenStorage.translate("Once confirmed, this transaction cannot be reversed. Funds will be credited to your registered bank account within 24 hours."),
                       style: AppTextStyles.body13W600Gold.copyWith(color: Colors.orange),
                     ),
                   ),
@@ -484,7 +485,7 @@ class _SellGoldScreenState extends State<SellGoldScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
-                child: goldLoading?Center(child: CustomLoader()):Text('Continue to Payment',
+                child: goldLoading?Center(child: CustomLoader()):Text(TokenStorage.translate( "Continue to Payment"),
                     style: AppTextStyles.body18W600Black),
               ),
             ),

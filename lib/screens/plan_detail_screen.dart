@@ -424,10 +424,17 @@ class PlanDetailScreen extends StatelessWidget {
     final profileProvider = context.read<ProfileDetailsProvider>();
     profileProvider.fetchProfile();
 
-    final bankId =
-        profileProvider.profileData?.data?.profile?.primaryBankAccount?.id;
+    bool isProcessing = false;
+    bool autoRenewEnabled = true; // NEW
+    int? selectedBankId;          // NEW – user selected bank
 
-    bool isProcessing = false; // Loader flag
+    // Fetch available bank accounts
+    final bankList = profileProvider.profileData
+        ?.data?.profile?.bankAccounts ?? [];
+
+    // default selected (primary)
+    selectedBankId =
+        profileProvider.profileData?.data?.profile?.primaryBankAccount?.id;
 
     showDialog(
       context: context,
@@ -437,12 +444,15 @@ class PlanDetailScreen extends StatelessWidget {
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: Colors.black,
-              shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              title: Text("Confirm Enrollment",
-                  style: GoogleFonts.poppins(color: Colors.white)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)
+              ),
 
-              // ---------------------- CONTENT ----------------------
+              title: Text(
+                "Confirm Enrollment",
+                style: GoogleFonts.poppins(color: Colors.white),
+              ),
+
               content: isProcessing
                   ? SizedBox(
                 height: 80,
@@ -455,18 +465,83 @@ class PlanDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  // Main confirmation text
                   Text(
                     "Enroll in $title?",
                     style: GoogleFonts.poppins(
                         color: Colors.white70,
-                        fontSize: 14
+                        fontSize: 14),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  // ******** BANK SELECTION DROPDOWN ********
+                  Text(
+                    "Select Bank Account",
+                    style: GoogleFonts.poppins(
+                        color: Colors.white70,
+                        fontSize: 13),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF1A1A1A),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        dropdownColor: Color(0xFF1A1A1A),
+                        value: selectedBankId,
+                        items: bankList.map<DropdownMenuItem<int>>((bank) {
+                          return DropdownMenuItem<int>(
+                            value: bank.id,
+                            child: Text(
+                              "${bank.bankName} (${bank.accountNumber})",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 13
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            selectedBankId = val;
+                          });
+                        },
+                      ),
                     ),
                   ),
 
                   const SizedBox(height: 15),
 
-                  // ------------------- DETAILS BOX -------------------
+                  // ******** AUTO RENEW SWITCH ********
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Auto-Renewal",
+                        style: GoogleFonts.poppins(
+                            color: Colors.white70,
+                            fontSize: 13),
+                      ),
+                      Switch(
+                        value: autoRenewEnabled,
+                        activeColor: color,
+                        onChanged: (val) {
+                          setState(() {
+                            autoRenewEnabled = val;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  // ******** DETAILS BOX ********
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -476,33 +551,35 @@ class PlanDetailScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _infoRow("Bank ID:", bankId?.toString() ?? "N/A"),
+                        _infoRow("Bank ID:",
+                            selectedBankId?.toString() ?? "N/A"),
                         const SizedBox(height: 8),
                         _infoRow("Start Date:", _formattedNow()),
                         const SizedBox(height: 8),
-                        _infoRow("Auto-Renewal:", "Enabled"),
+                        _infoRow("Auto-Renewal:",
+                            autoRenewEnabled ? "Enabled" : "Disabled"),
                       ],
                     ),
                   ),
                 ],
               ),
 
-              // ---------------------- ACTIONS ----------------------
               actions: [
                 if (!isProcessing)
                   TextButton(
                     onPressed: () => Navigator.pop(dialogCtx),
-                    child: Text("Cancel",
-                        style: GoogleFonts.poppins(color: Colors.white70)),
+                    child: Text(
+                      "Cancel",
+                      style: GoogleFonts.poppins(color: Colors.white70),
+                    ),
                   ),
 
                 if (!isProcessing)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: color),
                     onPressed: () async {
-                      // ❌ KYC NOT APPROVED
-                      if (profileProvider.profileData?.data?.profile?.kycStatus !=
-                          "approved") {
+                      if (profileProvider
+                          .profileData?.data?.profile?.kycStatus != "approved") {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -511,7 +588,6 @@ class PlanDetailScreen extends StatelessWidget {
                         return;
                       }
 
-                      // START LOADER
                       setState(() => isProcessing = true);
 
                       final now = DateTime.now();
@@ -520,15 +596,16 @@ class PlanDetailScreen extends StatelessWidget {
 
                       final body = {
                         "invest_plan_mobile_id": planId,
-                        "bank_account_id": bankId,
+                        "bank_account_id": selectedBankId,  // UPDATED
                         "start_date": formatted,
-                        "auto_renew": true,
+                        "auto_renew": autoRenewEnabled,      // UPDATED
                       };
 
-                      debugPrint("Enrollment Body: $body");
+                      debugPrint("Enrollment Body: **************** $body");
 
                       final enrollProvider =
                       context.read<EnrollInvestmentProvider>();
+
                       await enrollProvider.enrollInvestment(body);
 
                       if (enrollProvider.success) {
@@ -536,18 +613,17 @@ class PlanDetailScreen extends StatelessWidget {
                           SnackBar(
                             backgroundColor: Colors.green,
                             content: Text(
-                              enrollProvider.message ?? "Enrolled Successfully",
+                              enrollProvider.message ??
+                                  "Enrolled Successfully",
                               style: GoogleFonts.poppins(),
                             ),
                           ),
                         );
 
-                        // Refresh Plans
                         final plansProvider =
                         context.read<InvestmentPlansProvider>();
                         await plansProvider.getInvestmentPlans();
 
-                        // Redirect Dashboard
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -568,8 +644,10 @@ class PlanDetailScreen extends StatelessWidget {
                         Navigator.pop(dialogCtx);
                       }
                     },
-                    child: Text("Enroll Now",
-                        style: GoogleFonts.poppins(color: Colors.black)),
+                    child: Text(
+                      "Enroll Now",
+                      style: GoogleFonts.poppins(color: Colors.black),
+                    ),
                   ),
               ],
             );
@@ -578,6 +656,7 @@ class PlanDetailScreen extends StatelessWidget {
       },
     );
   }
+
 
 // ---------------------- HELPERS ----------------------
 

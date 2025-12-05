@@ -63,15 +63,16 @@ class _AllPlansScreenState extends State<AllPlansScreen> {
         itemBuilder: (context, index) {
           final Plan plan = provider.plans[index];
 
-          final bool isPurchased =
-          widget.purchasedPlans.contains(plan.name);
+          final bool isPurchased = widget.purchasedPlans.contains(plan.name);
+          final bool isPurchas = plan.isSubscribed;  // user enrolled
 
-          final badge = plan.isSubscribed
+          final String? badge = isPurchas
               ? "Active"
               : (plan.isFeatured ? "Premium" : null);
 
-          final badgeColor =
-          isPurchased ? Colors.green : const Color(0xFFFFD700);
+          final Color badgeColor = isPurchas
+              ? Colors.green     // Active → Green
+              : const Color(0xFFFFD700);   // Other badges → Gold
 
           return _buildPlanCard(
             context: context,

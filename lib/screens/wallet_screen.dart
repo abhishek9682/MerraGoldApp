@@ -181,7 +181,7 @@ class _WalletScreenState extends State<WalletScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'TOTAL VALUE',
+            TokenStorage.translate("TOTAL VALUE"),
             style: GoogleFonts.poppins(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -206,7 +206,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Invested',
+                  TokenStorage.translate("Invested"),
                     style: GoogleFonts.poppins(
                       fontSize: 13,
                       color: const Color(0xFF0A0A0A).withOpacity(0.7),
@@ -235,7 +235,7 @@ class _WalletScreenState extends State<WalletScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Gold Holdings',
+          TokenStorage.translate("Gold Holdings"),
           style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
         ),
         const SizedBox(height: 16),
@@ -247,9 +247,9 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
           child: Column(
             children: [
-              _buildHoldingItem(icon: '💎', title: '24K Digital Gold', subtitle: '${provider.profileData!.data!.profile!.goldBalance} grams • ₹${provider.profileData!.data!.profile!.goldBalanceValue}', onTap: () {}),
+              _buildHoldingItem(icon: '💎', title: TokenStorage.translate("24K Digital Gold"), subtitle: '${provider.profileData!.data!.profile!.goldBalance} grams • ₹${provider.profileData!.data!.profile!.goldBalanceValue}', onTap: () {}),
               Divider(color: Colors.white.withOpacity(0.1), height: 1, indent: 20, endIndent: 20),
-              _buildHoldingItem(icon: '📦', title: 'Secured Vault', subtitle: '100% Safe & Insured', onTap: () {}),
+              _buildHoldingItem(icon: '📦', title: TokenStorage.translate("Secured Vault"), subtitle: TokenStorage.translate("100% Safe & Insured"), onTap: () {}),
             ],
           ),
         ),

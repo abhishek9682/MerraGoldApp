@@ -65,10 +65,70 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    showKYCPopup();
     _loadProfileData();
     Provider.of<ProfileDetailsProvider>(context, listen: false);
     print("------${TokenStorage.translate("user image")}");
   }
+
+
+  void showKYCPopup() {
+    final kycProvider = Provider.of<ProfileDetailsProvider>(context, listen: false);
+    final kycStatus = kycProvider.profileData?.data?.profile?.kycStatus;
+
+    if (kycStatus == "not_submitted") {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              title: const Text(
+                "KYC Pending",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              content: const Text(
+                "Your KYC is not submitted yet.\nPlease complete KYC to continue.",
+                style: TextStyle(fontSize: 16),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Later",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // go to KYC screen
+                    // Navigator.push(...);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text("Complete Now"),
+                ),
+              ],
+            );
+          },
+        );
+      });
+    }
+  }
+
 
   Future<void> _loadProfileData() async {
     setState(() {
@@ -483,6 +543,8 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     }
   }
 
+
+
   Future<void> submitKyc() async {
     if (kycField.isEmpty) {
       _showErrorSnackbar("Please select at least one document");
@@ -512,7 +574,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
       if (response?['status'] == "success") {
         await profileProvider.fetchProfile();
-        _showSuccessSnackbar("KYC updated successfully!");
+        _showSuccessSnackbar(TokenStorage.translate("KYC updated successfully!"));
         setState(() {
           isKycDone = true;
           kycField.clear();
@@ -609,6 +671,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0A),
         appBar: CustomAppBar(
@@ -619,45 +682,51 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
           },
           showMore: true,
         ),
-      body: _isUpdatingProfile || _isSubmittingKyc
+      body: _isUpdatingProfile || _isSubmittingKyc || _isLoading
           ? const Center(
         child: CustomLoader(color: Colors.yellow, size: 50,),
       )
-          : SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildStepIndicator(),
-              const SizedBox(height: 24),
+          : RefreshIndicator(
 
-              // STEP 1: PERSONAL DETAILS
-              if (_currentStep == 0) ...[
-                _buildProfilePictureSection(),
-                const SizedBox(height: 32),
-                _buildBasicInformation(),
-                const SizedBox(height: 32),
-                _buildAddressDetails(),
-                const SizedBox(height: 32),
-                _buildSaveButtonDetails(),
-                const SizedBox(height: 20),
+            onRefresh: () async{
+              showKYCPopup();
+            },
+            child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildStepIndicator(),
+                const SizedBox(height: 24),
+
+                // STEP 1: PERSONAL DETAILS
+                if (_currentStep == 0) ...[
+                  _buildProfilePictureSection(),
+                  const SizedBox(height: 32),
+                  _buildBasicInformation(),
+                  const SizedBox(height: 32),
+                  _buildAddressDetails(),
+                  const SizedBox(height: 32),
+                  _buildSaveButtonDetails(),
+                  const SizedBox(height: 20),
+                ],
+                _displayDocuments(),
+                // STEP 2: KYC DETAILS
+                if (_currentStep == 1) ...[
+                  const SizedBox(height: 32),
+                  _buildKYCDocuments(),
+                  const SizedBox(height: 32),
+                  _buildSaveButtonKyc(),
+                  const SizedBox(height: 20),
+                ],
               ],
-              _displayDocuments(),
-              // STEP 2: KYC DETAILS
-              if (_currentStep == 1) ...[
-                const SizedBox(height: 32),
-                _buildKYCDocuments(),
-                const SizedBox(height: 32),
-                _buildSaveButtonKyc(),
-                const SizedBox(height: 20),
-              ],
-            ],
+            ),
+                    ),
+                  ),
           ),
-        ),
-      ),
       bottomNavigationBar: CustomBottomBar(
       selectedIndex: _selectedNavIndex,
       onItemSelected: _onNavItemTapped,

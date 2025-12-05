@@ -149,9 +149,24 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isPrimary ? Colors.amber : Colors.white12,
+          color: isPrimary
+              ? const Color(0xFFFFD700).withOpacity(0.5)
+              : Colors.white.withOpacity(0.1),
         ),
-        color:const Color(0xFFFFD600).withOpacity(0.2),
+        // color:isPrimary?const Color(0xFFFFD600).withOpacity(0.2):Colors.black,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isPrimary
+              ? [
+            const Color(0xFFFFD700).withOpacity(0.2),
+            const Color(0xFF1A1A1A),
+          ]
+              : [
+            const Color(0xFF1A1A1A),
+            const Color(0xFF1A1A1A),
+          ],
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,33 +200,18 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
                   ),
                 ),
               ),
-              isVarified==false ?InkWell(
-                  onTap: () async {
-                    await provider.fetchProfile();   // 🔥 ensure latest bank data
-                    final updatedBank = provider.bankAccounts[index]; // updated list
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AddBankAccountScreen(bank: updatedBank),
-                      ),
-                    );
-                  },
-                  child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white10,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit, size: 14, color: Colors.white),
-                      SizedBox(width: 4),
-                      Text(TokenStorage.translate("Edit"), style: TextStyle(color: Colors.white, fontSize: 12)),
-                    ],
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: isPrimary ? null : () => _setPrimary(provider, bank.id!),
+                  child: Text(
+                    TokenStorage.translate(TokenStorage.translate("Set Primary")),
+                    style: TextStyle(
+                      color: isPrimary ? Colors.white38 : Colors.amber,
+                    ),
                   ),
                 ),
-              ):SizedBox()
+              ),
+
             ],
           ),
 
@@ -240,40 +240,57 @@ class _BankAccountsScreenState extends State<BankAccountsScreen> {
           Text(bank.ifscCode ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
 
           const SizedBox(height: 8),
-
-          Text(TokenStorage.translate("Branch"), style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
-          Text(bank.branchName ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
+          //
+          // Text(TokenStorage.translate("Branch"), style: GoogleFonts.poppins(color: Colors.white60, fontSize: 12)),
+          // Text(bank.branchName ?? "-", style: GoogleFonts.poppins(color: Colors.white70)),
 
           const SizedBox(height: 20),
           if (!isPrimary)
-          Row(
-            children: [
-              // SET PRIMARY
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: isPrimary ? null : () => _setPrimary(provider, bank.id!),
-                  child: Text(
-                    TokenStorage.translate(TokenStorage.translate("Set Primary")),
-                    style: TextStyle(
-                      color: isPrimary ? Colors.white38 : Colors.amber,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
+    Row(
+    children: [
+    // EDIT button (only when NOT verified)
+    if (isVarified == false)
+    Expanded(
+    child: OutlinedButton.icon(
+    onPressed: () async {
+    await provider.fetchProfile();
+    final updatedBank = provider.bankAccounts[index];
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (_) => AddBankAccountScreen(bank: updatedBank),
+    ),
+    );
+    },
+    style: OutlinedButton.styleFrom(
+    side: BorderSide(color: Colors.white30),
+    ),
+    icon: Icon(Icons.edit, size: 16, color: Colors.white),
+    label: Text(
+    TokenStorage.translate("Edit"),
+    style: const TextStyle(color: Colors.white),
+    ),
+    ),
+    ),
 
-              // DELETE
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _removeAccount(provider, bank.id!, isPrimary),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
-                    ),
-                    child: Text(TokenStorage.translate("Remove"), style: TextStyle(color: Colors.red)),
-                  ),
-                ),
-            ],
-          )
+    if (isVarified == false) const SizedBox(width: 10),
+
+    // REMOVE button
+    Expanded(
+    child: OutlinedButton.icon(
+    onPressed: () => _removeAccount(provider, bank.id!, isPrimary),
+    style: OutlinedButton.styleFrom(
+    side: const BorderSide(color: Colors.red),
+    ),
+    icon: const Icon(Icons.delete, size: 16, color: Colors.red),
+    label: Text(
+    TokenStorage.translate("Remove"),
+    style: const TextStyle(color: Colors.red),
+    ),
+    ),
+    ),
+    ],
+    ),
         ],
       ),
     );

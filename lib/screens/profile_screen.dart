@@ -9,6 +9,7 @@ import '../controllers/update_profile.dart';
 import '../helpers/security_storage.dart';
 import '../models/Language.dart';
 import '../utils/token_storage.dart';
+import 'Profile_notifiacation.dart';
 import 'Terms and condition.dart';
 import 'language_selection_screen.dart';
 import 'login_screen.dart';
@@ -88,70 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context,
       MaterialPageRoute(builder: (context) => const LanguageSelectionScreen()),
     );
-    // showModalBottomSheet(
-    //   context: context,
-    //   backgroundColor: const Color(0xFF1A1A1A),
-    //   shape: const RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    //   ),
-    //   builder: (context) {
-    //     return Padding(
-    //       padding: const EdgeInsets.all(24.0),
-    //       child: Consumer<ProfileDetailsProvider>(builder: (context, provider, _) {
-    //         return Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           children: [
-    //             Center(
-    //               child: Container(
-    //                 width: 40,
-    //                 height: 4,
-    //                 decoration: BoxDecoration(
-    //                   color: Colors.white30,
-    //                   borderRadius: BorderRadius.circular(2),
-    //                 ),
-    //               ),
-    //             ),
-    //             const SizedBox(height: 24),
-    //             Text("Select Language", style: AppTextStyles.heading),
-    //             const SizedBox(height: 24),
-    //
-    //             ListView.builder(
-    //               shrinkWrap: true,
-    //               physics: const NeverScrollableScrollPhysics(),
-    //               itemCount: provider.profileData?.data?.languages?.length ?? 0,
-    //               itemBuilder: (context, index) {
-    //                 final lang = provider.profileData!.data!.languages![index];
-    //
-    //                 bool isSelected =
-    //                     provider.selectedLanguage == lang.name;
-    //
-    //
-    //                 return _buildLanguageOption(
-    //                   lang.name ??'',
-    //                   lang.flag ??'',
-    //                   isSelected,
-    //                   onTap: () {
-    //                     provider.setSelectedLanguage(lang.name ??'');
-    //
-    //                     Navigator.pop(context);
-    //
-    //                     ScaffoldMessenger.of(context).showSnackBar(
-    //                       SnackBar(
-    //                         content:
-    //                         Text("Language changed to ${lang.name}"),
-    //                         backgroundColor: Colors.green,
-    //                       ),
-    //                     );
-    //                   },
-    //                 );
-    //               },
-    //             ),
-    //           ],
-    //         );
-    //       }),
-    //     );
-    //   },
-    // );
+
   }
 
   Widget _buildLanguageOption(
@@ -203,38 +141,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-
-  // void _showLogoutDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       backgroundColor: const Color(0xFF1A1A1A),
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-  //       title: Text('Logout', style: AppTextStyles.heading),
-  //       content: Text('Are you sure you want to logout?', style: AppTextStyles.bodyText),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.pop(context),
-  //           child: Text(TokenStorage.translate("Cancel"), style: AppTextStyles.subHeading.copyWith(color: Colors.white60)),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: () {
-  //             Navigator.pop(context);
-  //             ScaffoldMessenger.of(context).showSnackBar(
-  //               const SnackBar(content: Text('Logged out successfully')),
-  //             );
-  //           },
-  //           style: ElevatedButton.styleFrom(
-  //             backgroundColor: const Color(0xFFFFD700),
-  //             foregroundColor: const Color(0xFF0A0A0A),
-  //           ),
-  //           child: Text('Logout', style: AppTextStyles.buttonText),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -496,7 +402,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: TokenStorage.translate("notification"),
                   subtitle: TokenStorage.translate("Managealerts"),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationSettingsScreen()));
                   },
                 ),
                 _buildDivider(),
@@ -624,7 +530,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(16),
         ),
         title: Text(
-          'Logout',
+          TokenStorage.translate('Logout'),
           style: GoogleFonts.poppins(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -640,7 +546,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              TokenStorage.translate('Cancel'),
               style: GoogleFonts.poppins(
                 color: Colors.white60,
               ),
@@ -667,7 +573,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               foregroundColor: const Color(0xFF0A0A0A),
             ),
             child: Text(
-              'Logout',
+              TokenStorage.translate('Logout'),
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
               ),

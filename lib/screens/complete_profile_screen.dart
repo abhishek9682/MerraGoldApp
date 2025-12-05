@@ -178,6 +178,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                           fontSize: 18, fontWeight: FontWeight.w600)),
                 ),
               ),
+              SizedBox(height: 30,),
             ],
           ),
         ),
